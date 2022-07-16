@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a0afc73169505046ba69809091c8062, type: 3}
-  m_Name: 03_Warrior
+  m_Name: 01_SoldierA
   m_EditorClassIdentifier: 
-  className: Warrior
-  hp: 16
-  atk: 4
-  move: 1
+  className: Hero
+  hp: 10
+  atk: 3
+  move: 3
+  sprite: {fileID: 1323185584, guid: 52879eac13c852a4fad99808ad3919c8, type: 3}
