@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class ControlManager : MonoBehaviour {
     public static ControlManager instance;
@@ -23,6 +24,8 @@ public class ControlManager : MonoBehaviour {
         mainControl.Player.Click.performed += ctx => {            
             onMouseDown.Invoke(mpos);
         };
+        mainControl.Player.Restart.performed += 
+        ctx => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public UnityEvent<Vector2> onMouseDown = new UnityEvent<Vector2>();

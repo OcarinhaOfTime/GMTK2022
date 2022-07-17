@@ -43,6 +43,11 @@ public class Unit : MonoBehaviour {
 	public bool Move(Coord p){
 		var map = MapController.instance.map;
 		if(map[p].unit != null){
+			if(map[p].unit == this){
+				print("hell yeah");
+				SetHasMoved(true);
+				return true;
+			}
 			Debug.LogError("Already occupied");
 			return false;
 		}

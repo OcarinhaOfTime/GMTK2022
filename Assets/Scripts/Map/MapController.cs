@@ -46,7 +46,8 @@ public class MapController : MonoBehaviour {
         print($"clicked {x}x{y}");
         var tile = map[x, y];
         ResetSelection();
-        selectedTiles = map.Navigate(x, y, k, (t, x0, y0) => t.Active(), t => t.cost);
+        selectedTiles = map.Navigate(
+            x, y, k, (t, x0, y0) => t.Active(), t => t.const_compound);
     }
 
     public void ResetSelection(){

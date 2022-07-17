@@ -11,6 +11,10 @@ public class EnemyUnit : Unit {
     }
 
     public async Task Evaluate(){
+        var map = MapController.instance.map;
+        map.Navigate(coord.x, coord.y, attributes.move, 
+        (t, x, y) => {}, 
+        t => t.const_compound);
         await AsyncTweener.Wait(1f);
         SetHasMoved(true);
     }

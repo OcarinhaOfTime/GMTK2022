@@ -16,7 +16,8 @@ public class Tile : MonoBehaviour {
         }
     }
     public int cost = 1;
-    public int cost_value { set  {costt.text = "" + value; cost = value;}  }
+    public int const_compound => cost + (unit != null ? 999 : 0);
+    public int cost_value { set { costt.text = "" + value; cost = value; } }
     [SerializeField] TMP_Text costt;
     private SpriteRenderer spriteRenderer;
     public Color activeColor;
