@@ -42,16 +42,24 @@ public class GameManager : MonoBehaviour {
     }
 
     public async Task Battle(Unit a, Unit b){
+        var dist = a.coord.TileDist(b.coord);
         print($"{a.team}'s {a.attributes.className} attacked {b.attributes.className}");
         await AsyncTweener.Wait(.25f);
-        var dmg = await DiceManager.instance.RollD6(a.attributes.atk, a.teamID);
-        b.TakeDamage(dmg);
-        await AsyncTweener.Wait(1);
-        if(!b.alive) return;
-        print($"{b.team}'s {b.attributes.className} attacked {a.attributes.className}");
-        await AsyncTweener.Wait(.25f);
-        dmg = await DiceManager.instance.RollD6(b.attributes.atk, b.teamID);
-        a.TakeDamage(dmg);
-        await AsyncTweener.Wait(.5f);
+        if(a.attributes.range >= dist){
+            var dmg = await DiceManager.instance.RollD6(a.attributes.atk, a.teamID);
+            b.TakeDamage(dmg);
+            await AsyncTweener.Wait(1);
+            if(!b.alive) return;
+        }
+
+        if(b.attributes.range >= dist){
+            print($"{b.team}'s {b.attributes.className} attacked {a.attributes.className}");
+            await AsyncTweener.Wait(.25f);
+            var dmg = await DiceManager.instance.RollD6(b.attributes.atk, b.teamID);
+            a.TakeDamage(dmg);
+            await AsyncTweener.Wait(.5f);
+        }
+        
+        
     }
 }

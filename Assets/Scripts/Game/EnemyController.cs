@@ -10,6 +10,7 @@ public class EnemyController : TurnController {
         UnitSelected
     }
     public EnemyUnit[] units;
+    public override Unit[] main_units => units;
     public bool endTurn;
     public ControlState state = ControlState.Idle;
     MapController mapController;
@@ -31,6 +32,7 @@ public class EnemyController : TurnController {
         //     await Task.Yield();
         // }
         foreach(var u in units){
+            if(!u.alive) continue;
             await u.Evaluate(targetController);
         }
 

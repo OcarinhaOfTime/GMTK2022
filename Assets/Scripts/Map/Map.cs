@@ -124,7 +124,8 @@ public class Map<T> : IEnumerable<T> {
         mem.Add((x0, y0));
 
         IterQuad(x0, y0, (t, x, y) => {
-            if(Coord.TileDist((x, y), first_tile) <= Coord.TileDist(lastTile, first_tile)) return;
+            var dtest = Coord.TileDist((x, y), first_tile) <= Coord.TileDist(lastTile, first_tile);
+            if(dtest && mem.Contains((x, y))) return;
             NavigateRecusive(x, y, k-cost_fn(t),first_tile, (x0, y0), mem, onEach, cost_fn);
         });
     }

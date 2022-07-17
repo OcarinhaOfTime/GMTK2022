@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -30,7 +31,7 @@ public class EnemyUnit : Unit {
 
     public int dist;
     async Task Idle(){
-        var target = controller.units[0];
+        target = GetClosestUnit();
         dist = coord.TileDist(target.coord);
         if(dist < 5){
             state = AIState.Aggressive;
@@ -38,8 +39,24 @@ public class EnemyUnit : Unit {
         }
     }
 
+    Unit GetClosestUnit(){
+        var us = controller.main_units;
+        (int d, Unit u) = controller.main_units.Aggregate((999, us[0]), (acc, k) => {
+            var dist = coord.TileDist(k.coord);
+            if(dist < acc.Item1){
+                acc.Item1 = dist;
+                acc.Item2 = k;
+            }
+
+            return acc;
+        });
+        return u;
+    }
+
+    public Unit target;
+
     async Task<bool> TryToAttack(){
-        var target = controller.units[0];
+        target = GetClosestUnit();
         if(coord.TileDist(target.coord) <= 1){
             print("We attack");
             await GameManager.instance.Battle(this, target);
@@ -57,7 +74,7 @@ public class EnemyUnit : Unit {
         var map = MapController.instance.map;
         var d = 999f;
         var c = coord;
-        map.Navigate(coord.x, coord.y, attributes.move,
+        map.Navigate(coord.x, coord.y, attributes.move * 2,
         (t, x, y) => {
             var _d = t.coord.TileDist(target.coord);
             if (_d < d) {

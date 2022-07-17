@@ -17,4 +17,6 @@ public abstract class TurnController : MonoBehaviour {
     public virtual bool EvaluateLoseCondition(){
         return false;
     }
+
+    public abstract Unit[] main_units {get; }
 }

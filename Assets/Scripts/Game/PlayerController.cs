@@ -19,12 +19,17 @@ public class PlayerController : TurnController {
     Vector2 mpos;
     Unit selectedUnit;
     Unit selectedEnemy;
+
+    public override Unit[] main_units => units.Where(u => u.alive).ToArray();
+
     public override void Setup() {
         endTurn = true;
         units = GetComponentsInChildren<Unit>();
         mapController = MapController.instance;
         foreach (var u in units) u.Setup();
-        ControlManager.instance.onMouseDown.AddListener(Process);
+        var cm = ControlManager.instance;
+        cm.onMouseDown.AddListener(Process);
+        cm.mainControl.Player.PassTurn.performed += ctx => endTurn = true;
         CameraController.instance.FocusImmediate(units[0].transform.position);
     }
 
@@ -33,7 +38,7 @@ public class PlayerController : TurnController {
         await CameraController.instance.Focus(units[0].transform.position);
         endTurn = false;
         while (!endTurn) {
-            endTurn = units.Aggregate(true, (acc, x) => acc && x.hasMoved);
+            endTurn = units.Aggregate(true, (acc, x) => acc && (x.hasMoved || !x.alive));
             await Task.Yield();
         }
 
@@ -92,14 +97,24 @@ public class PlayerController : TurnController {
         state = ControlState.Idle;
         selectedUnit.SetHasMoved(true);
         if (!selectedUnit.Move(new Coord(x, y))) return;
-        mapController.map.IterQuad(x, y, (t, x1, y1) => {
+        // mapController.map.IterQuad(x, y, (t, x1, y1) => {
+        //     if (t.unit != null && t.unit is EnemyUnit) {
+        //         selectedEnemy = t.unit;
+        //         selectedUnit.SetHasMoved(false);
+        //         //state = ControlState.UnitEngaged;
+        //         Battle();
+        //     }
+        // });
+
+        mapController.map.Navigate(x, y, selectedUnit.attributes.range,
+         (t, x1, y1) => {
             if (t.unit != null && t.unit is EnemyUnit) {
                 selectedEnemy = t.unit;
                 selectedUnit.SetHasMoved(false);
                 //state = ControlState.UnitEngaged;
                 Battle();
             }
-        });
+        }, t => 1);
     }
 
     async void Battle(){

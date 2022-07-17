@@ -89,6 +89,15 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PassTurn"",
+                    ""type"": ""Button"",
+                    ""id"": ""60e74b76-bf35-4de8-b426-58b9515f3b9d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -432,6 +441,17 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
                     ""action"": ""Restart"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e477abf1-f107-4138-b0df-c336faae74ce"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PassTurn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -447,6 +467,7 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
         m_Player_Zoomin = m_Player.FindAction("Zoomin", throwIfNotFound: true);
         m_Player_Zoomout = m_Player.FindAction("Zoomout", throwIfNotFound: true);
         m_Player_Restart = m_Player.FindAction("Restart", throwIfNotFound: true);
+        m_Player_PassTurn = m_Player.FindAction("PassTurn", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -513,6 +534,7 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Zoomin;
     private readonly InputAction m_Player_Zoomout;
     private readonly InputAction m_Player_Restart;
+    private readonly InputAction m_Player_PassTurn;
     public struct PlayerActions
     {
         private @ControlMap m_Wrapper;
@@ -524,6 +546,7 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
         public InputAction @Zoomin => m_Wrapper.m_Player_Zoomin;
         public InputAction @Zoomout => m_Wrapper.m_Player_Zoomout;
         public InputAction @Restart => m_Wrapper.m_Player_Restart;
+        public InputAction @PassTurn => m_Wrapper.m_Player_PassTurn;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -554,6 +577,9 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
                 @Restart.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
                 @Restart.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
                 @Restart.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
+                @PassTurn.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPassTurn;
+                @PassTurn.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPassTurn;
+                @PassTurn.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPassTurn;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -579,6 +605,9 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
                 @Restart.started += instance.OnRestart;
                 @Restart.performed += instance.OnRestart;
                 @Restart.canceled += instance.OnRestart;
+                @PassTurn.started += instance.OnPassTurn;
+                @PassTurn.performed += instance.OnPassTurn;
+                @PassTurn.canceled += instance.OnPassTurn;
             }
         }
     }
@@ -592,5 +621,6 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
         void OnZoomin(InputAction.CallbackContext context);
         void OnZoomout(InputAction.CallbackContext context);
         void OnRestart(InputAction.CallbackContext context);
+        void OnPassTurn(InputAction.CallbackContext context);
     }
 }
