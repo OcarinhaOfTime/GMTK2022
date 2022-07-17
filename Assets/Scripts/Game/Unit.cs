@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class Unit : MonoBehaviour {
 	public string team;
+	public int teamID;
 	public Coord coord;
 	public bool active = false;
 	[SerializeField] SpriteRenderer spriteRenderer;
@@ -29,7 +30,9 @@ public class Unit : MonoBehaviour {
 		MapController.instance.map[coord].unit = this;
 		spriteRenderer.sprite = attributes.sprite;
 		SetHasMoved(false);
-		team = GetComponentInParent<TurnController>().controllerName;
+		var cont = GetComponentInParent<TurnController>();
+		team = cont.controllerName;
+		teamID = cont.teamID;
 	}
 
 	public void StartTurn(){

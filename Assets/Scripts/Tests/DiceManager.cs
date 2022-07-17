@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 
 public class DiceManager : MonoBehaviour {    
+    public static DiceManager instance;
     public Texture2D[] sprites;
     public DiceAnim heroPrefab;
     public DiceAnim villainPrefab;
@@ -16,8 +17,11 @@ public class DiceManager : MonoBehaviour {
     [SerializeField]CanvasGroup result_cg;
     public float spacing = 3;
     bool working = false;
+    bool clicked_out;
+    public int cheat_roll = 7;
 
     void Awake(){
+        instance = this;
         hdices = new DiceAnim[ndices];
         vdices = new DiceAnim[ndices];
         for(int i=0; i<ndices; i++){
@@ -41,15 +45,24 @@ public class DiceManager : MonoBehaviour {
     // [Range(1, 4)]public int test_k = 1;
     // [ContextMenu("Test")]
     // public async void Test(){
-    //     await RollD6(test_k, vdices);
+    //     await RollD6(test_k, hdices);
     // }
 
     public async Task<int> RollD6Hero(int k){
-        return await RollD6(k, hdices);
+        var r = await RollD6(k, hdices);
+        return r;
     }
 
     public async Task<int> RollD6Villain(int k){
-        return await RollD6(k, hdices);
+        return await RollD6(k, vdices);
+    }
+
+    public async Task<int> RollD6(int k, int team){
+        if(team == 0){
+            return await RollD6(k, hdices);
+        }
+
+        return await RollD6(k, vdices);
     }
 
     public async Task<int> RollD6(int k, DiceAnim[] dices){

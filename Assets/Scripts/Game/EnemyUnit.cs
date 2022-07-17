@@ -16,7 +16,7 @@ public class EnemyUnit : Unit {
         controller = (PlayerController)targetController;
         switch(state){
             case AIState.Idle:
-            Idle();
+            await Idle();
             break;
 
             case AIState.Patrol:
@@ -29,9 +29,13 @@ public class EnemyUnit : Unit {
     }
 
     public int dist;
-    void Idle(){
+    async Task Idle(){
         var target = controller.units[0];
         dist = coord.TileDist(target.coord);
+        if(dist < 5){
+            state = AIState.Aggressive;
+            await Aggressive();
+        }
     }
 
     async Task<bool> TryToAttack(){

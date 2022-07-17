@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class TurnController : MonoBehaviour {
     public string controllerName = "Player";
     public Color controllerColor = Color.white;
+    public int teamID = 0;
     public virtual void Setup(){
         
     }

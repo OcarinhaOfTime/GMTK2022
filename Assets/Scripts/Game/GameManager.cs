@@ -44,12 +44,14 @@ public class GameManager : MonoBehaviour {
     public async Task Battle(Unit a, Unit b){
         print($"{a.team}'s {a.attributes.className} attacked {b.attributes.className}");
         await AsyncTweener.Wait(.25f);
-        b.TakeDamage(a.attributes.atk);
+        var dmg = await DiceManager.instance.RollD6(a.attributes.atk, a.teamID);
+        b.TakeDamage(dmg);
         await AsyncTweener.Wait(1);
         if(!b.alive) return;
         print($"{b.team}'s {b.attributes.className} attacked {a.attributes.className}");
         await AsyncTweener.Wait(.25f);
-        a.TakeDamage(b.attributes.atk);
+        dmg = await DiceManager.instance.RollD6(b.attributes.atk, b.teamID);
+        a.TakeDamage(dmg);
         await AsyncTweener.Wait(.5f);
     }
 }

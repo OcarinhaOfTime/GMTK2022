@@ -15,6 +15,6 @@ MonoBehaviour:
   className: Warrior
   hp: 3
   atk: 1
-  move: 4
+  move: 3
   range: 1
   sprite: {fileID: -1554704740, guid: 52879eac13c852a4fad99808ad3919c8, type: 3}

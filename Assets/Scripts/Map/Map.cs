@@ -109,20 +109,23 @@ public class Map<T> : IEnumerable<T> {
         mem.Add((x0, y0));
         onEach.Invoke(map[x0, y0], x0, y0);
         IterQuad(x0, y0, (t, x, y) => {
-            NavigateRecusive(x, y, k-cost_fn(t), mem, onEach, cost_fn);
+            NavigateRecusive(x, y, k-cost_fn(t),(x0, y0), (x0, y0), mem, onEach, cost_fn);
         });
 
         return mem;
     }
 
-    public void NavigateRecusive(int x0, int y0, int k, HashSet<(int, int)> mem, 
+    public void NavigateRecusive(int x0, int y0, int k, 
+    (int, int) first_tile, (int, int) lastTile,
+    HashSet<(int, int)> mem, 
     Action<T, int, int> onEach, Func<T, int> cost_fn) {
         if(k < 0) return;
         if(!mem.Contains((x0, y0))) onEach.Invoke(map[x0, y0], x0, y0);
         mem.Add((x0, y0));
 
         IterQuad(x0, y0, (t, x, y) => {
-            NavigateRecusive(x, y, k-cost_fn(t), mem, onEach, cost_fn);
+            if(Coord.TileDist((x, y), first_tile) <= Coord.TileDist(lastTile, first_tile)) return;
+            NavigateRecusive(x, y, k-cost_fn(t),first_tile, (x0, y0), mem, onEach, cost_fn);
         });
     }
 
@@ -216,6 +219,10 @@ public class Coord {
 
     public int TileDist(Coord other) {
         return Mathf.Abs(x - other.x) + Mathf.Abs(y - other.y);
+    }
+
+    public static int TileDist((int, int) a, (int, int) b) {
+        return Mathf.Abs(a.Item1 - b.Item1) + Mathf.Abs(a.Item2 - b.Item2);
     }
 
     public bool Equals(Coord other) {
