@@ -84,4 +84,15 @@ public class Unit : MonoBehaviour {
 			Die();
 		}
 	}
+
+	void OnValidate(){
+		ApplyChanges();
+	}
+
+	[ContextMenu("Apply Changes")]
+	void ApplyChanges(){
+		transform.position = Map<Tile>.CoordToWorldPoint(coord.x, coord.y, 32, 32);
+		
+		spriteRenderer.sprite = attributes.sprite;
+	}
 }

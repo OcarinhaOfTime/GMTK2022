@@ -130,7 +130,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Player Chars_0
+      name: P_mage
       rect:
         serializedVersion: 2
         x: 5
@@ -138,7 +138,7 @@ TextureImporter:
         width: 6
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -151,7 +151,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player Chars_1
+      name: P_archer
       rect:
         serializedVersion: 2
         x: 21
@@ -159,7 +159,7 @@ TextureImporter:
         width: 6
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -172,7 +172,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player Chars_2
+      name: P_cleric
       rect:
         serializedVersion: 2
         x: 37
@@ -180,7 +180,7 @@ TextureImporter:
         width: 6
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -193,7 +193,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player Chars_3
+      name: P_Hero
       rect:
         serializedVersion: 2
         x: 52
@@ -201,7 +201,7 @@ TextureImporter:
         width: 8
         height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -214,7 +214,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player Chars_4
+      name: P_thief1
       rect:
         serializedVersion: 2
         x: 6
@@ -222,7 +222,7 @@ TextureImporter:
         width: 4
         height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -235,7 +235,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player Chars_5
+      name: P_thief2
       rect:
         serializedVersion: 2
         x: 22
@@ -243,7 +243,7 @@ TextureImporter:
         width: 4
         height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -256,7 +256,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player Chars_6
+      name: P_warrior1
       rect:
         serializedVersion: 2
         x: 36
@@ -264,7 +264,7 @@ TextureImporter:
         width: 8
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -277,7 +277,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player Chars_7
+      name: P_warrior2
       rect:
         serializedVersion: 2
         x: 52
@@ -285,7 +285,7 @@ TextureImporter:
         width: 8
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -308,14 +308,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Player Chars_0: 1153422524
-      Player Chars_4: -1554704740
-      Player Chars_3: -283358428
-      Player Chars_6: 1323185584
-      Player Chars_5: -276008070
-      Player Chars_1: -413422946
-      Player Chars_2: -71697310
-      Player Chars_7: -437629757
+      P_Hero: -283358428
+      P_thief2: -276008070
+      P_archer: -413422946
+      P_mage: 1153422524
+      P_thief1: -1554704740
+      P_cleric: -71697310
+      P_warrior1: 1323185584
+      P_warrior2: -437629757
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 

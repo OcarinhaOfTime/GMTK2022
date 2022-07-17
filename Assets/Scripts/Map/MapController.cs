@@ -9,23 +9,29 @@ public class MapController : MonoBehaviour {
     public Tile prefab;
     public int width = 8;
     public int height = 8;
+    public bool generateAtStart;
 
     void Awake(){
         instance = this;
     }
 
     void Start(){
-        Generate();
+        if(generateAtStart){
+            Generate();
+        }else{
+            Load();
+        }
     }
 
+    [ContextMenu("Generate")]
     public void Generate() {
         map = new Map<Tile>(width, height, CreateTile);
-        map[1, 0].cost_value = 666;
-        map[1, 1].cost_value = 666;
-        map[1, 2].cost_value = 666;
-        map[0, 2].cost_value = 666;
-        map[3, 2].cost_value = 2;
-        map[4, 2].cost_value = 2;
+    }
+
+    public int currentChild = 1;
+    public void Load() {
+        currentChild = 1;
+        map = new Map<Tile>(width, height, LoadTile);
     }
 
     Tile CreateTile(int x, int y){
@@ -37,6 +43,16 @@ public class MapController : MonoBehaviour {
         inst.name = $"{x}x{y}";
         inst.gameObject.SetActive(true);
         inst.coord = new Coord(x, y);        
+        inst.Deactive();
+        inst.HideSprites();
+        return inst;
+    }
+
+    Tile LoadTile(int x, int y){
+        var inst = transform.GetChild(currentChild++).GetComponent<Tile>();
+        inst.name = $"{x}x{y}";
+        //inst.gameObject.SetActive(true);
+        //inst.coord = new Coord(x, y);        
         inst.Deactive();
         return inst;
     }
