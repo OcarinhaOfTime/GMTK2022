@@ -181,7 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: GMTK JAM
+  m_text: DICE WARS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bfc662a35ed1166469035ae6a75c8c83, type: 2}
   m_sharedMaterial: {fileID: -8706858898159508710, guid: bfc662a35ed1166469035ae6a75c8c83, type: 2}

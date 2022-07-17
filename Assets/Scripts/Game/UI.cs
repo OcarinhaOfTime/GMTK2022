@@ -8,6 +8,7 @@ public class UI : MonoBehaviour {
     public static UI instance;
     [SerializeField]TMP_Text msg_txt;
     [SerializeField]CanvasGroup cg;
+    [SerializeField]CanvasGroup endgame_cg;
     void Awake(){
         instance = this;
     }
@@ -22,5 +23,16 @@ public class UI : MonoBehaviour {
 
     public async Task ShowMessage(string msg){
         await ShowMessage(msg, Color.white);
+    }
+
+    public async Task ShowPermMessage(string msg){
+        msg_txt.color = Color.white;
+        msg_txt.text = msg;
+        await AsyncTweener.Tween(.5f, t => cg.alpha = t);
+        await AsyncTweener.Wait(1);
+        //await AsyncTweener.Tween(.25f, t => cg.alpha = 1-t);
+    }
+    public async Task ToggleEndgame(){
+        await AsyncTweener.Tween(.5f, t => endgame_cg.alpha = t);
     }
 }

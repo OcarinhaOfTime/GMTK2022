@@ -21,6 +21,7 @@ public class Tile : MonoBehaviour {
     private SpriteRenderer spriteRenderer;
     public Color activeColor;
     public Color deactiveColor;
+    public Unit unit = null;
 
     public bool active = false;
 

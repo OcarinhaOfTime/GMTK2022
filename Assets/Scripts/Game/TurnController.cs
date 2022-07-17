@@ -12,4 +12,8 @@ public abstract class TurnController : MonoBehaviour {
     public virtual async Task PerformTurn(){
         await Task.Yield();
     }
+
+    public virtual bool EvaluateLoseCondition(){
+        return false;
+    }
 }

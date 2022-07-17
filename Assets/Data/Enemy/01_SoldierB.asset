@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0afc73169505046ba69809091c8062, type: 3}
   m_Name: 01_SoldierB
   m_EditorClassIdentifier: 
-  className: Hero
+  className: Soldier B
   hp: 10
   atk: 3
   move: 3

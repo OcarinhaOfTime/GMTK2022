@@ -62,6 +62,24 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Zoomin"",
+                    ""type"": ""Button"",
+                    ""id"": ""d63d77b9-0588-4627-9733-eca3747f4954"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Zoomout"",
+                    ""type"": ""Button"",
+                    ""id"": ""7fc9e076-6bb0-4304-9e20-baccb6b15050"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -350,6 +368,50 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
                     ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""64b83c3a-2b21-4db1-86f6-8c775729068e"",
+                    ""path"": ""<Keyboard>/rightBracket"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoomin"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a545f1c5-0483-44b4-8dfd-0bd2c329855d"",
+                    ""path"": ""<Keyboard>/equals"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoomin"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3a9a015d-d6ba-4744-9e59-25730d324473"",
+                    ""path"": ""<Keyboard>/backslash"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoomout"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b9a16adc-bfe2-4c16-874d-739aadf63d8b"",
+                    ""path"": ""<Keyboard>/equals"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoomout"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -362,6 +424,8 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
         m_Player_Any = m_Player.FindAction("Any", throwIfNotFound: true);
         m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
+        m_Player_Zoomin = m_Player.FindAction("Zoomin", throwIfNotFound: true);
+        m_Player_Zoomout = m_Player.FindAction("Zoomout", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -425,6 +489,8 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Shoot;
     private readonly InputAction m_Player_Any;
     private readonly InputAction m_Player_Click;
+    private readonly InputAction m_Player_Zoomin;
+    private readonly InputAction m_Player_Zoomout;
     public struct PlayerActions
     {
         private @ControlMap m_Wrapper;
@@ -433,6 +499,8 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
         public InputAction @Any => m_Wrapper.m_Player_Any;
         public InputAction @Click => m_Wrapper.m_Player_Click;
+        public InputAction @Zoomin => m_Wrapper.m_Player_Zoomin;
+        public InputAction @Zoomout => m_Wrapper.m_Player_Zoomout;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -454,6 +522,12 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
                 @Click.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
                 @Click.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
                 @Click.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
+                @Zoomin.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoomin;
+                @Zoomin.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoomin;
+                @Zoomin.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoomin;
+                @Zoomout.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoomout;
+                @Zoomout.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoomout;
+                @Zoomout.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoomout;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -470,6 +544,12 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
                 @Click.started += instance.OnClick;
                 @Click.performed += instance.OnClick;
                 @Click.canceled += instance.OnClick;
+                @Zoomin.started += instance.OnZoomin;
+                @Zoomin.performed += instance.OnZoomin;
+                @Zoomin.canceled += instance.OnZoomin;
+                @Zoomout.started += instance.OnZoomout;
+                @Zoomout.performed += instance.OnZoomout;
+                @Zoomout.canceled += instance.OnZoomout;
             }
         }
     }
@@ -480,5 +560,7 @@ public partial class @ControlMap : IInputActionCollection2, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnAny(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);
+        void OnZoomin(InputAction.CallbackContext context);
+        void OnZoomout(InputAction.CallbackContext context);
     }
 }

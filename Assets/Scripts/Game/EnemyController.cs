@@ -9,14 +9,14 @@ public class EnemyController : TurnController {
         Idle,
         UnitSelected
     }
-    public Enemy[] units;
+    public EnemyUnit[] units;
     public bool endTurn;
     public ControlState state = ControlState.Idle;
     MapController mapController;
     Vector2 mpos;
     Unit selectedUnit;
     public override void Setup() {
-        units = GetComponentsInChildren<Enemy>();
+        units = GetComponentsInChildren<EnemyUnit>();
         mapController = MapController.instance;
         foreach (var u in units) u.Setup();
         //ControlManager.instance.onMouseDown.AddListener(Process);
@@ -37,5 +37,9 @@ public class EnemyController : TurnController {
 
         foreach (var u in units) u.EndTurn();
         endTurn = true;
+    }
+
+    public override bool EvaluateLoseCondition() {
+        return units.Aggregate(true, (acc, u) => acc && !u.alive);
     }
 }

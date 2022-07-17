@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   className: Hero
   hp: 20
-  atk: 3
+  atk: 12
   move: 3
   sprite: {fileID: -413422946, guid: 52879eac13c852a4fad99808ad3919c8, type: 3}

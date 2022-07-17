@@ -7,7 +7,8 @@ using UnityEngine;
 public class PlayerController : TurnController {
     public enum ControlState {
         Idle,
-        UnitSelected
+        UnitSelected,
+        UnitEngaged,
     }
     public Unit[] units;
     public bool endTurn;
@@ -20,10 +21,12 @@ public class PlayerController : TurnController {
         mapController = MapController.instance;
         foreach (var u in units) u.Setup();
         ControlManager.instance.onMouseDown.AddListener(Process);
+        CameraController.instance.FocusImmediate(units[0].transform.position);
     }
 
     public override async Task PerformTurn() {
         foreach (var u in units) u.StartTurn();
+        await CameraController.instance.Focus(units[0].transform.position);
         endTurn = false;
         while (!endTurn) {
             endTurn = units.Aggregate(true, (acc, x) => acc && x.hasMoved);
@@ -34,7 +37,7 @@ public class PlayerController : TurnController {
         endTurn = true;
     }
 
-    void ProcessTest(Vector2 mpo){
+    void ProcessTest(Vector2 mpo) {
         (var x, var y, var b) = mapController.EvaluateMouse();
         print($"{x}x{y} {b}");
     }
@@ -50,6 +53,10 @@ public class PlayerController : TurnController {
             case ControlState.UnitSelected:
                 UnitSelected();
                 break;
+
+            case ControlState.UnitEngaged:
+                UnitEngaged();
+                break;
         }
     }
 
@@ -57,7 +64,7 @@ public class PlayerController : TurnController {
         foreach (var u in units) {
             if (u.hasMoved) continue;
             var col = u.GetComponent<BoxCollider2D>();
-            if(!col.OverlapPoint(mpos)) continue;
+            if (!col.OverlapPoint(mpos)) continue;
 
             print("We move");
             state = ControlState.UnitSelected;
@@ -66,13 +73,37 @@ public class PlayerController : TurnController {
         }
     }
 
-    void UnitSelected(){
+    void UnitSelected() {
         state = ControlState.Idle;
         (var x, var y, var b) = mapController.EvaluateMouse();
         mapController.ResetSelection();
 
-        if(!b) return;
-        if(!mapController.selectedTiles.Contains((x, y))) return;
-        selectedUnit.Move(new Coord(x, y));
+        if (!b) return;
+        if (!mapController.selectedTiles.Contains((x, y))) return;
+        if (!selectedUnit.Move(new Coord(x, y))) return;
+        mapController.map.IterQuad(x, y, (t, x1, y1) => {
+            if (t.unit != null && t.unit is EnemyUnit) {
+                selectedUnit.SetHasMoved(false);
+                state = ControlState.UnitEngaged;
+            }
+        });
+    }
+
+    async void UnitEngaged() {
+        state = ControlState.Idle;
+        selectedUnit.SetHasMoved(true);
+
+        (var x, var y, var b) = mapController.EvaluateMouse();
+        if (!b) return;
+        var t = mapController.map[x, y];
+        if (t.unit != null && t.unit is EnemyUnit) {
+            selectedUnit.SetHasMoved(false);
+            await GameManager.instance.Battle(selectedUnit, t.unit);
+            selectedUnit.SetHasMoved(true);
+        }
+    }
+
+    public override bool EvaluateLoseCondition() {
+        return !units[0].alive;
     }
 }
