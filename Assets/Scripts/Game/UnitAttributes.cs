@@ -8,5 +8,6 @@ public class UnitAttributes : ScriptableObject {
     public int hp = 10;
     public int atk = 2;
     public int move = 2;
+    public int range = 1;
     public Sprite sprite;
 }
