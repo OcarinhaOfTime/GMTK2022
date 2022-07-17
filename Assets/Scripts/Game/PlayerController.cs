@@ -17,6 +17,7 @@ public class PlayerController : TurnController {
     Vector2 mpos;
     Unit selectedUnit;
     public override void Setup() {
+        endTurn = true;
         units = GetComponentsInChildren<Unit>();
         mapController = MapController.instance;
         foreach (var u in units) u.Setup();

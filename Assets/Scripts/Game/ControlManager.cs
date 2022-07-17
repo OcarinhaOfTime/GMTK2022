@@ -29,4 +29,9 @@ public class ControlManager : MonoBehaviour {
     }
 
     public UnityEvent<Vector2> onMouseDown = new UnityEvent<Vector2>();
+
+    void OnDestroy(){
+        print("Disposing this crap");
+        mainControl.Dispose();
+    }
 }

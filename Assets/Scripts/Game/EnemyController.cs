@@ -15,6 +15,7 @@ public class EnemyController : TurnController {
     MapController mapController;
     Vector2 mpos;
     Unit selectedUnit;
+    public TurnController targetController;
     public override void Setup() {
         units = GetComponentsInChildren<EnemyUnit>();
         mapController = MapController.instance;
@@ -30,7 +31,7 @@ public class EnemyController : TurnController {
         //     await Task.Yield();
         // }
         foreach(var u in units){
-            await u.Evaluate();
+            await u.Evaluate(targetController);
         }
 
         await AsyncTweener.Wait(.5f);

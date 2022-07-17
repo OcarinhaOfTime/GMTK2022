@@ -458,8 +458,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 
   coord:
-    x: 6
-    y: 7
+    x: 8
+    y: 8
   active: 0
   spriteRenderer: {fileID: 198731523}
   attributes: {fileID: 11400000, guid: de3d723b777216e4abf50db4aa0e8a6b, type: 2}
@@ -1544,6 +1544,7 @@ MonoBehaviour:
   units: []
   endTurn: 0
   state: 0
+  targetController: {fileID: 276579089}
 --- !u!4 &1302079587
 Transform:
   m_ObjectHideFlags: 0
@@ -1643,6 +1644,8 @@ MonoBehaviour:
   hasMoved: 0
   hp: 0
   alive: 1
+  state: 2
+  dist: 0
 --- !u!1 &1441535540
 GameObject:
   m_ObjectHideFlags: 0

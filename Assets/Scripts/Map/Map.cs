@@ -214,6 +214,10 @@ public class Coord {
         return Mathf.Sqrt(DistSqrt(other));
     }
 
+    public int TileDist(Coord other) {
+        return Mathf.Abs(x - other.x) + Mathf.Abs(y - other.y);
+    }
+
     public bool Equals(Coord other) {
         return x == other.x && y == other.y;
     }

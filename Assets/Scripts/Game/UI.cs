@@ -11,6 +11,7 @@ public class UI : MonoBehaviour {
     [SerializeField]CanvasGroup endgame_cg;
     void Awake(){
         instance = this;
+        endgame_cg.alpha = cg.alpha = 0;
     }
 
     public async Task ShowMessage(string msg, Color color){
