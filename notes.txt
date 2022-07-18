@@ -1,0 +1,10 @@
+#bugs
+* bugs click while dice rolling
+* 
+
+# improvements
+* camera focus
+* feedback
+
+$ideias
+* teleport

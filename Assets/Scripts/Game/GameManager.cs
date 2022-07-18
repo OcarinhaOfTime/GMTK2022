@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
+    public AudioSource music;
+    public AudioClip mainClip;
+    public AudioClip winClip;
+    public AudioClip loseClip;
     public static GameManager instance;
     public TurnController[] controllers;
     public TurnController currentController => controllers[currentControllerIndex];
@@ -11,6 +15,8 @@ public class GameManager : MonoBehaviour {
     public bool gameEnded = false;
 
     void Awake(){
+        music.loop = true;
+        music.clip = mainClip;
         instance = this;
     }
     void Start(){
@@ -27,14 +33,21 @@ public class GameManager : MonoBehaviour {
             currentControllerIndex = (currentControllerIndex + 1) % controllers.Length;
             foreach(var c in controllers) gameEnded |= c.EvaluateLoseCondition();
             if(gameEnded) break;
-            await UI.instance.ShowMessage("Changing Turn");
-
-            
+            await UI.instance.ShowMessage("Changing Turn");            
         }
 
+        music.Stop();
+        music.loop = false;
+        
         if(controllers[0].EvaluateLoseCondition()){
+            //SFXPlayer.instance.Play(6);
+            music.clip = loseClip;
+            music.Play();
             await UI.instance.ShowPermMessage("Game Over.");
         }else{
+            //SFXPlayer.instance.Play(5);
+            music.clip = winClip;
+            music.Play();
             await UI.instance.ShowPermMessage("Victory!");
         }
 
@@ -46,8 +59,11 @@ public class GameManager : MonoBehaviour {
         print($"{a.team}'s {a.attributes.className} attacked {b.attributes.className}");
         await AsyncTweener.Wait(.25f);
         if(a.attributes.range >= dist){
+            
             var dmg = await DiceManager.instance.RollD6(a.attributes.atk, a.teamID);
+            SFXPlayer.instance.Play(0);
             b.TakeDamage(dmg);
+            
             await AsyncTweener.Wait(1);
             if(!b.alive) return;
         }
@@ -56,6 +72,8 @@ public class GameManager : MonoBehaviour {
             print($"{b.team}'s {b.attributes.className} attacked {a.attributes.className}");
             await AsyncTweener.Wait(.25f);
             var dmg = await DiceManager.instance.RollD6(b.attributes.atk, b.teamID);
+            
+            SFXPlayer.instance.Play(0);
             a.TakeDamage(dmg);
             await AsyncTweener.Wait(.5f);
         }

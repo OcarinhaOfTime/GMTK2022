@@ -17,4 +17,4 @@ MonoBehaviour:
   atk: 1
   move: 2
   range: 1
-  sprite: {fileID: 1636717311, guid: 280fe3a0cc6dbac40901f9405c43ba2f, type: 3}
+  sprite: {fileID: -997153857, guid: 280fe3a0cc6dbac40901f9405c43ba2f, type: 3}

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   className: Soldier B
   hp: 3
-  atk: 3
+  atk: 1
   move: 3
   range: 1
-  sprite: {fileID: -2051611801, guid: 280fe3a0cc6dbac40901f9405c43ba2f, type: 3}
+  sprite: {fileID: -1236890389, guid: 280fe3a0cc6dbac40901f9405c43ba2f, type: 3}

@@ -57,7 +57,7 @@ public class EnemyUnit : Unit {
 
     async Task<bool> TryToAttack(){
         target = GetClosestUnit();
-        if(coord.TileDist(target.coord) <= 1){
+        if(coord.TileDist(target.coord) <= attributes.range){
             print("We attack");
             await GameManager.instance.Battle(this, target);
             return true;

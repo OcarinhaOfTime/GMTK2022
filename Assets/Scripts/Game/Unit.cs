@@ -23,6 +23,7 @@ public class Unit : MonoBehaviour {
 		col = GetComponent<Collider>();
 		hp = max_hp;
 		hud.hp_fill = 1;
+		spriteRenderer.color = Color.white;
 	}
 
 	public void Setup(){
@@ -64,9 +65,11 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void Die(){
+		if(!alive) return;
 		alive = false;
 		gameObject.SetActive(false);
 		MapController.instance.map[coord].unit = null;
+		SFXPlayer.instance.Play(3);
 	}
 
 	public void SetCollider(bool b){
@@ -78,11 +81,17 @@ public class Unit : MonoBehaviour {
 		spriteRenderer.color = b ? Color.gray : Color.white;
 	}
 
+	async void BlinkInRed(){
+		await AsyncTweener.Tween(.25f, t => spriteRenderer.color = Color.Lerp(Color.white, Color.red, Mathf.PingPong(t*2, 1)));
+	}
+
 	public void TakeDamage(int damage){
+
 		if(!alive) return;
 		hp -= damage;
 		hp = Mathf.Max(0, hp);
 		hud.hp_fill = hp / (float)max_hp;
+		BlinkInRed();
 		if(hp <= 0){
 			Die();
 		}

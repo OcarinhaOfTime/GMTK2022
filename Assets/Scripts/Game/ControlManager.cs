@@ -24,6 +24,7 @@ public class ControlManager : MonoBehaviour {
         mainControl.Player.Click.performed += ctx => {            
             onMouseDown.Invoke(mpos);
         };
+        mainControl.Player.Exit.performed += ctx => Application.Quit();
         mainControl.Player.Restart.performed += 
         ctx => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
