@@ -10,6 +10,7 @@ public class EnemyController : TurnController {
         UnitSelected
     }
     public EnemyUnit[] units;
+    public EnemyUnit boss;
     public override Unit[] main_units => units;
     public bool endTurn;
     public ControlState state = ControlState.Idle;
@@ -43,6 +44,7 @@ public class EnemyController : TurnController {
     }
 
     public override bool EvaluateLoseCondition() {
-        return units.Aggregate(true, (acc, u) => acc && !u.alive);
+        //return units.Aggregate(true, (acc, u) => acc && !u.alive);
+        return !boss.alive;
     }
 }

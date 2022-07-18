@@ -89,9 +89,9 @@ public class DiceManager : MonoBehaviour {
         }
         //await Task.all(tsks);
         await Task.WhenAll(tsks);
-        await AsyncTweener.Wait(1.5f);
+        await AsyncTweener.Wait(1.0f);
         await AsyncTweener.Tween(.25f, t =>  result_cg.alpha = t);
-        await AsyncTweener.Wait(2f);
+        await AsyncTweener.Wait(1f);
         await AsyncTweener.Tween(.25f, t =>  result_cg.alpha = 1-t);
         DisableDices();
         working = false;

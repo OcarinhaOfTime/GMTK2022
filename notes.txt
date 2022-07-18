@@ -4,7 +4,9 @@
 
 # improvements
 * camera focus
-* feedback
+* visual feedback for attacks
 
-$ideias
+#ideias
 * teleport
+* menu
+* change health bar

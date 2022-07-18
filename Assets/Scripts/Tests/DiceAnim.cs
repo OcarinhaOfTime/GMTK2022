@@ -29,7 +29,7 @@ public class DiceAnim : MonoBehaviour {
         var dir = Random.onUnitSphere;
         var r0 = Quaternion.identity;
         Vector3 s = transform.localScale;
-        await AsyncTweener.Tween(1, t => {
+        await AsyncTweener.Tween(.5f, t => {
             var v = dir * Mathf.Lerp(speed, speed_end, t);
             transform.localRotation *= Quaternion.Euler(v * Time.deltaTime);
             float st = Mathf.Lerp(-1, 1, t);
@@ -37,17 +37,13 @@ public class DiceAnim : MonoBehaviour {
             transform.localScale = Vector3.Lerp(s, s*0.8f, ht);
         });
 
-        await AsyncTweener.Tween(.5f, t => alpha = t); 
+        await AsyncTweener.Tween(.25f, t => alpha = t);         
 
-        
-
-        await AsyncTweener.Tween(.25f, t => {           
+        await AsyncTweener.Tween(.1f, t => {           
             transform.localRotation = Quaternion.Slerp(transform.localRotation, r0, t);
         });
 
-        await AsyncTweener.Wait(1);
-        // await AsyncTweener.Tween(.25f, t => alpha = 1-t);
-        // await AsyncTweener.Wait(.25f);
+        await AsyncTweener.Wait(.5f);
     }
 
     public void ResetPos(){

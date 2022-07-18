@@ -34,6 +34,7 @@ public class Unit : MonoBehaviour {
 		var cont = GetComponentInParent<TurnController>();
 		team = cont.controllerName;
 		teamID = cont.teamID;
+		hud.hudColor = cont.controllerColor;
 	}
 
 	public void StartTurn(){

@@ -77,13 +77,14 @@ public class PlayerController : TurnController {
             selectedUnit = u;
             waiting = true;
             option = await WorldUI.instance.Evaluate(u.coord, 0, 2);
-            waiting = false;
+            
 
             if(option == 0){
                 state = ControlState.UnitMoving;
                 var m = await DiceManager.instance.RollD6Hero(u.attributes.move);
                 mapController.OnClickTile(u.coord.x, u.coord.y, m);
-            }            
+            }   
+            waiting = false;         
         }
     }
 
