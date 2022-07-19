@@ -13,6 +13,9 @@ public class EnemyUnit : Unit {
     public AIState state = AIState.Idle;
     PlayerController controller;
 
+    public int dist;
+    public Unit target;
+
     public async Task Evaluate(TurnController targetController) {
         controller = (PlayerController)targetController;
         switch(state){
@@ -28,8 +31,6 @@ public class EnemyUnit : Unit {
             break;
         }
     }
-
-    public int dist;
     async Task Idle(){
         target = GetClosestUnit();
         dist = coord.TileDist(target.coord);
@@ -53,7 +54,6 @@ public class EnemyUnit : Unit {
         return u;
     }
 
-    public Unit target;
 
     async Task<bool> TryToAttack(){
         target = GetClosestUnit();
