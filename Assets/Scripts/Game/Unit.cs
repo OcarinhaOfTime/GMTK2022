@@ -107,5 +107,10 @@ public class Unit : MonoBehaviour {
 		transform.position = Map<Tile>.CoordToWorldPoint(coord.x, coord.y, 32, 32);
 		
 		spriteRenderer.sprite = attributes.sprite;
+		var cont = GetComponentInParent<TurnController>();
+		team = cont.controllerName;
+		teamID = cont.teamID;
+		hud = GetComponentInChildren<WorldHUD>();
+		hud.hudColor = cont.controllerColor;
 	}
 }

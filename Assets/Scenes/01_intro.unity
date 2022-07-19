@@ -181,10 +181,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DICE WARS
+  m_text: Dice Wars
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bfc662a35ed1166469035ae6a75c8c83, type: 2}
-  m_sharedMaterial: {fileID: -8706858898159508710, guid: bfc662a35ed1166469035ae6a75c8c83, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 18a88630f23273e409e467c72cc50871, type: 2}
+  m_sharedMaterial: {fileID: -2893289709371034866, guid: 18a88630f23273e409e467c72cc50871, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -758,8 +758,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: PRESS ANY KEY
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bfc662a35ed1166469035ae6a75c8c83, type: 2}
-  m_sharedMaterial: {fileID: -8706858898159508710, guid: bfc662a35ed1166469035ae6a75c8c83, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9f523c81d7c6ef646aac240846bd43d3, type: 2}
+  m_sharedMaterial: {fileID: 9136898833106241954, guid: 9f523c81d7c6ef646aac240846bd43d3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
