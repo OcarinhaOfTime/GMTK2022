@@ -19,4 +19,10 @@ public abstract class TurnController : MonoBehaviour {
     }
 
     public abstract Unit[] main_units {get; }
+    [ContextMenu("Apply to childrem")]
+    public void ApplyToChildrem(){
+        foreach(var u in GetComponentsInChildren<Unit>()){
+            u.ApplyChanges();
+        }
+    }
 }

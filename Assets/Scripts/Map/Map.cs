@@ -102,7 +102,7 @@ public class Map<T> : IEnumerable<T> {
             if(map.IsInMapRange(x, y)) onEach(map[x, y], x, y);
         }
         
-    } 
+    }
 
     public HashSet<(int, int)> Navigate(int x0, int y0, int k, Action<T, int, int> onEach, Func<T, int> cost_fn) {
         HashSet<(int, int)> mem = new HashSet<(int, int)>();
@@ -129,27 +129,6 @@ public class Map<T> : IEnumerable<T> {
             NavigateRecusive(x, y, k-cost_fn(t),first_tile, (x0, y0), mem, onEach, cost_fn);
         });
     }
-
-    // public void Navigate(int x, int y, int k, Action<T, int, int> onEach) {
-    //     HashSet<(int, int)> mem = new HashSet<(int, int)>();
-    //     mem.Add((x, y));
-    //     onEach.Invoke(map[x, y], x, y);
-    //     NavigateRecusive(x+1, y, k-1, mem, onEach);
-    //     NavigateRecusive(x, y+1, k-1, mem, onEach);
-    //     NavigateRecusive(x-1, y, k-1, mem, onEach);
-    //     NavigateRecusive(x, y-1, k-1, mem, onEach);
-    // }
-
-    // public void NavigateRecusive(int x, int y, int k, HashSet<(int, int)> mem, Action<T, int, int> onEach) {
-    //     if(!mem.Contains((x, y))) onEach.Invoke(map[x, y], x, y);
-    //     mem.Add((x, y));
-    //     if(k <= 0) return;
-
-    //     NavigateRecusive(x+1, y, k-1, mem, onEach);
-    //     NavigateRecusive(x, y+1, k-1, mem, onEach);
-    //     NavigateRecusive(x-1, y, k-1, mem, onEach);
-    //     NavigateRecusive(x, y-1, k-1, mem, onEach);
-    // }
 
     public void MapNeighborIter(Coord tile, Action<T, int, int> onEach) {
         for(int x = tile.x - 1; x <= tile.x + 1; x++) {

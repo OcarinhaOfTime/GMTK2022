@@ -6,6 +6,7 @@ using UnityEngine;
 public class DiceAnim : MonoBehaviour {
     public float speed = 45;
     public float speed_end = 10;
+    public float duration = .5f;
     Material mat;
     public float alpha {
         set => mat.SetFloat("_Alpha", value);
@@ -29,7 +30,7 @@ public class DiceAnim : MonoBehaviour {
         var dir = Random.onUnitSphere;
         var r0 = Quaternion.identity;
         Vector3 s = transform.localScale;
-        await AsyncTweener.Tween(.5f, t => {
+        await AsyncTweener.Tween(duration * 1.2f, t => {
             var v = dir * Mathf.Lerp(speed, speed_end, t);
             transform.localRotation *= Quaternion.Euler(v * Time.deltaTime);
             float st = Mathf.Lerp(-1, 1, t);
@@ -37,13 +38,13 @@ public class DiceAnim : MonoBehaviour {
             transform.localScale = Vector3.Lerp(s, s*0.8f, ht);
         });
 
-        await AsyncTweener.Tween(.25f, t => alpha = t);         
+        await AsyncTweener.Tween(duration*.3f, t => alpha = t);         
 
-        await AsyncTweener.Tween(.1f, t => {           
+        await AsyncTweener.Tween(duration * .5f, t => {           
             transform.localRotation = Quaternion.Slerp(transform.localRotation, r0, t);
         });
 
-        await AsyncTweener.Wait(.5f);
+        await AsyncTweener.Wait(duration * .3f);
     }
 
     public void ResetPos(){

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0afc73169505046ba69809091c8062, type: 3}
   m_Name: e_archer
   m_EditorClassIdentifier: 
-  className: Soldier B
+  className: Archer
   hp: 6
   atk: 2
   move: 2
-  range: 2
+  range: 3
   sprite: {fileID: -1141577108, guid: 280fe3a0cc6dbac40901f9405c43ba2f, type: 3}

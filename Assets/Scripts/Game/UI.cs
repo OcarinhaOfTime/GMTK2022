@@ -17,9 +17,9 @@ public class UI : MonoBehaviour {
     public async Task ShowMessage(string msg, Color color){
         msg_txt.color = color;
         msg_txt.text = msg;
-        await AsyncTweener.Tween(.5f, t => cg.alpha = t);
-        await AsyncTweener.Wait(1);
-        await AsyncTweener.Tween(.25f, t => cg.alpha = 1-t);
+        await AsyncTweener.Tween(.25f, t => cg.alpha = t);
+        await AsyncTweener.Wait(.75f);
+        await AsyncTweener.Tween(.15f, t => cg.alpha = 1-t);
     }
 
     public async Task ShowMessage(string msg){
@@ -29,8 +29,8 @@ public class UI : MonoBehaviour {
     public async Task ShowPermMessage(string msg){
         msg_txt.color = Color.white;
         msg_txt.text = msg;
-        await AsyncTweener.Tween(.5f, t => cg.alpha = t);
-        await AsyncTweener.Wait(1);
+        await AsyncTweener.Tween(.25f, t => cg.alpha = t);
+        await AsyncTweener.Wait(.75f);
         //await AsyncTweener.Tween(.25f, t => cg.alpha = 1-t);
     }
     public async Task ToggleEndgame(){

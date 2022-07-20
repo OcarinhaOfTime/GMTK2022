@@ -81,7 +81,7 @@ public class PlayerController : TurnController {
 
             if(option == 0){
                 state = ControlState.UnitMoving;
-                var m = await DiceManager.instance.RollD6Hero(u.attributes.move);
+                var m = await DiceManager.instance.RollD6(u.attributes.move, 0);
                 mapController.OnClickTile(u.coord.x, u.coord.y, m);
             }   
             waiting = false;         

@@ -16,5 +16,5 @@ MonoBehaviour:
   hp: 8
   atk: 2
   move: 2
-  range: 2
+  range: 3
   sprite: {fileID: -413422946, guid: 52879eac13c852a4fad99808ad3919c8, type: 3}

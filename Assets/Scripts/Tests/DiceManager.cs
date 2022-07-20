@@ -48,18 +48,19 @@ public class DiceManager : MonoBehaviour {
     //     await RollD6(test_k, hdices);
     // }
 
-    public async Task<int> RollD6Hero(int k){
-        var r = await RollD6(k, hdices);
-        return r;
-    }
+    // public async Task<int> RollD6Hero(int k){
+    //     var r = await RollD6(k, hdices);
+    //     return r;
+    // }
 
-    public async Task<int> RollD6Villain(int k){
-        return await RollD6(k, vdices);
-    }
+    // public async Task<int> RollD6Villain(int k){
+    //     return await RollD6(k, vdices);
+    // }
 
     public async Task<int> RollD6(int k, int team){
         if(team == 0){
-            return await RollD6(k, hdices);
+            var r = await RollD6(k, hdices);
+            return r;
         }
 
         return await RollD6(k, vdices);
@@ -89,10 +90,10 @@ public class DiceManager : MonoBehaviour {
         }
         //await Task.all(tsks);
         await Task.WhenAll(tsks);
-        await AsyncTweener.Wait(1.0f);
-        await AsyncTweener.Tween(.25f, t =>  result_cg.alpha = t);
-        await AsyncTweener.Wait(1f);
-        await AsyncTweener.Tween(.25f, t =>  result_cg.alpha = 1-t);
+        await AsyncTweener.Wait(0.75f);
+        await AsyncTweener.Tween(.2f, t =>  result_cg.alpha = t);
+        await AsyncTweener.Wait(.6f);
+        await AsyncTweener.Tween(.2f, t =>  result_cg.alpha = 1-t);
         DisableDices();
         working = false;
         return r;
