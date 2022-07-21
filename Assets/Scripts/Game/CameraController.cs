@@ -66,7 +66,7 @@ public class CameraController : MonoBehaviour {
         pos += v;
         ClampToMap();
     }
-    void Update() {
+    void LateUpdate() {
         if (!controlling) return;
         MoveCamera(deltaMov);
     }

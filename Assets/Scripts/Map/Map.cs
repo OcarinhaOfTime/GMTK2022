@@ -104,6 +104,23 @@ public class Map<T> : IEnumerable<T> {
         
     }
 
+    HashSet<(int, int)> mem;
+    public void FloodFill(int x0, int y0, int k, Action<T, int, int> fn){
+        mem = new HashSet<(int, int)>();
+        //mem.Add((x0, y0));
+        //fn(map[x0, y0], x0, y0);
+        FloodFillRecur(x0, y0, k, fn);
+    }
+
+    public void FloodFillRecur(int x0, int y0, int k, Action<T, int, int> fn){
+        if(mem.Contains((x0, y0)) || k < 0) return;
+        mem.Add((x0, y0));
+        fn(map[x0, y0], x0, y0);
+        IterQuad(x0, y0, (t, x, y) => {
+            FloodFillRecur(x, y, k-1, fn);
+        });
+    }
+
     public HashSet<(int, int)> Navigate(int x0, int y0, int k, Action<T, int, int> onEach, Func<T, int> cost_fn) {
         HashSet<(int, int)> mem = new HashSet<(int, int)>();
         mem.Add((x0, y0));
