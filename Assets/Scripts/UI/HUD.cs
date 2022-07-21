@@ -8,18 +8,26 @@ public class HUD : MonoBehaviour {
     [SerializeField]GameObject canvas;
     [SerializeField]TMP_Text[] val_txts;
     [SerializeField]TMP_Text title;
+    [SerializeField]BlinkSprite target;
 
     void Start(){
+        canvas.SetActive(false);
         ControlManager.instance.onMouseDown.AddListener(OnClick);
     }
 
     void OnClick(Vector2 mpos){
+        target.t0 = 0;
+        target.gameObject.SetActive(true);
         print("Clicked!!!");
         var map = MapController.instance;
         (var x, var y, var b) = map.EvaluateMouse();
+        var p = map.map.CoordToWorldPoint(new Coord(x, y));
+        target.transform.position = p;
+        canvas.SetActive(false);
         if(!b) return;
         var unit = map.map[x, y].unit;
         if(unit == null) return;
+        canvas.SetActive(true);
         ContextUI(unit);
     }
     public void ContextUI(Unit u){

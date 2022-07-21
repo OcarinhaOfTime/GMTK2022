@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class ControlManager : MonoBehaviour {
     public static ControlManager instance;
     public ControlMap mainControl;
+    [SerializeField]GfxClickable mainRaycaster;
     bool draggin;
     Camera cam;
     public Vector2 mpos{
@@ -21,9 +22,7 @@ public class ControlManager : MonoBehaviour {
         instance = this;
         mainControl = new ControlMap();
         mainControl.Enable();
-        mainControl.Player.Click.performed += ctx => {            
-            onMouseDown.Invoke(mpos);
-        };
+        mainRaycaster.onClick.AddListener(() => onMouseDown.Invoke(mpos));
         mainControl.Player.Exit.performed += ctx => Application.Quit();
         mainControl.Player.Restart.performed += 
         ctx => SceneManager.LoadScene(SceneManager.GetActiveScene().name);

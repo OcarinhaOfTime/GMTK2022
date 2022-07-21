@@ -51,4 +51,9 @@ public class WorldUI : MonoBehaviour {
         canvas.gameObject.SetActive(false);
         return clickedButton;
     }
+
+    public void Close(){
+        clickedButton = -1;
+        waiting = false;
+    }
 }

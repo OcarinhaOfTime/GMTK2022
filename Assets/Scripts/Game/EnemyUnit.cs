@@ -34,7 +34,7 @@ public class EnemyUnit : Unit {
     async Task Idle(){
         target = GetClosestUnit();
         dist = coord.TileDist(target.coord);
-        if(dist < 5){
+        if(dist < 10){
             state = AIState.Aggressive;
             await Aggressive();
         }

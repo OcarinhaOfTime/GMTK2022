@@ -70,49 +70,45 @@ public class PlayerController : TurnController {
     }
 
     async void Idle() {
-        foreach (var u in units) {
-            if (u.hasMoved) continue;
-            var col = u.GetComponent<BoxCollider2D>();
-            if (!col.OverlapPoint(mpos)) continue;            
-            selectedUnit = u;
-            waiting = true;
-            option = await WorldUI.instance.Evaluate(u.coord, 0, 2);
-            
+        await ProcessMap();
+    }
 
-            if(option == 0){
-                state = ControlState.UnitMoving;
-                var m = await DiceManager.instance.RollD6(u.attributes.move, 0);
-                mapController.OnClickTile(u.coord.x, u.coord.y, m);
-            }   
-            waiting = false;         
+    async Task ProcessMap(){
+        WorldUI.instance.Close();
+        (var x, var y, var b) = mapController.EvaluateMouse();
+        if(!b) return;
+        var u = mapController.map[x, y].unit;
+        selectedUnit = u;
+        if(u == null || u.hasMoved || u is EnemyUnit){
+            return;
         }
+
+        
+        option = await WorldUI.instance.Evaluate(u.coord, 0, 2);           
+
+        if(option == 0){
+            state = ControlState.UnitMoving;
+            var m = await DiceManager.instance.RollD6(u.attributes.move, 0);
+            mapController.OnClickTile(u.coord.x, u.coord.y, m);
+        } 
     }
 
     void UnitSelected() {
         (var x, var y, var b) = mapController.EvaluateMouse();
-        mapController.ResetSelection();
-
         if (!b) return;        
         if (!mapController.selectedTiles.Contains((x, y))) return;
+
+        mapController.ResetSelection();
         
         state = ControlState.Idle;
         selectedUnit.SetHasMoved(true);
         if (!selectedUnit.Move(new Coord(x, y))) return;
-        // mapController.map.IterQuad(x, y, (t, x1, y1) => {
-        //     if (t.unit != null && t.unit is EnemyUnit) {
-        //         selectedEnemy = t.unit;
-        //         selectedUnit.SetHasMoved(false);
-        //         //state = ControlState.UnitEngaged;
-        //         Battle();
-        //     }
-        // });
 
         mapController.map.Navigate(x, y, selectedUnit.attributes.range,
          (t, x1, y1) => {
             if (t.unit != null && t.unit is EnemyUnit) {
                 selectedEnemy = t.unit;
                 selectedUnit.SetHasMoved(false);
-                //state = ControlState.UnitEngaged;
                 Battle();
             }
         }, t => 1);
