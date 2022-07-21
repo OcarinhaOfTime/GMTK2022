@@ -25,4 +25,8 @@ public abstract class TurnController : MonoBehaviour {
             u.ApplyChanges();
         }
     }
+
+    protected virtual void OnUnitDeath(Unit u){
+
+    }
 }

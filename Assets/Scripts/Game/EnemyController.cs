@@ -47,4 +47,10 @@ public class EnemyController : TurnController {
         //return units.Aggregate(true, (acc, u) => acc && !u.alive);
         return !boss.alive;
     }
+
+    protected override void OnUnitDeath(Unit u) {
+        if(EvaluateLoseCondition()){
+            endTurn = true;
+        }
+    }
 }

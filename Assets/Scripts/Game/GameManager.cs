@@ -76,8 +76,6 @@ public class GameManager : MonoBehaviour {
             SFXPlayer.instance.Play(0);
             a.TakeDamage(dmg);
             await AsyncTweener.Wait(.5f);
-        }
-        
-        
+        }  
     }
 }

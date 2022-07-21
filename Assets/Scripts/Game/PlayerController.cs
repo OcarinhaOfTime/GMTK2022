@@ -147,4 +147,10 @@ public class PlayerController : TurnController {
     public override bool EvaluateLoseCondition() {
         return !units[0].alive;
     }
+
+   protected override void OnUnitDeath(Unit u) {
+        if(EvaluateLoseCondition()){
+            endTurn = true;
+        }
+    }
 }

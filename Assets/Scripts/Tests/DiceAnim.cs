@@ -40,7 +40,7 @@ public class DiceAnim : MonoBehaviour {
 
         await AsyncTweener.Tween(duration*.3f, t => alpha = t);         
 
-        await AsyncTweener.Tween(duration * .5f, t => {           
+        await AsyncTweener.Tween(duration * .85f, t => {           
             transform.localRotation = Quaternion.Slerp(transform.localRotation, r0, t);
         });
 

@@ -246,8 +246,8 @@ MonoBehaviour:
     y: 0
     width: 271
     height: 505
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 19}
@@ -402,7 +402,7 @@ MonoBehaviour:
   m_Zoom: -1
   m_ScrollPosition: {x: 0, y: 0}
   m_SelectedObject: {fileID: 0}
-  m_SelectedSpriteRectGUID: 5e97eb03825dee720800000000000000
+  m_SelectedSpriteRectGUID: 00000000000000000000000000000000
   m_LastUsedModuleTypeName: 
 --- !u!114 &16
 MonoBehaviour:
@@ -959,23 +959,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: f6770000
-      m_LastClickedID: 30710
-      m_ExpandedIDs: 24fbfffff677000024f20000
+      m_SelectedIDs: fcfafffff2faffff
+      m_LastClickedID: -1294
+      m_ExpandedIDs: 86ecffff22fbffff24fbffff729800004cac0000e0c0000060d70000daef0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Main Camera
+        m_OriginalName: Main Camera
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: 52058
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 4
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 10}
       m_SearchString: 
@@ -1026,22 +1026,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Effects
+    - Assets/Scripts/Game
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scripts/Effects
+  - Assets/Scripts/Game
   m_LastFoldersGridSize: 16
   m_LastProjectPath: E:\Projects\Github\gmtk2022
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 24140100
-    m_LastClickedID: 70692
-    m_ExpandedIDs: 00000000b2130100cc13010000ca9a3b
+    m_SelectedIDs: 1c1d0100
+    m_LastClickedID: 72988
+    m_ExpandedIDs: 00000000c01301000416010000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1069,7 +1069,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000b2130100
+    m_ExpandedIDs: 00000000c0130100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1094,24 +1094,24 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 62ecffff
-    m_LastClickedInstanceID: -5022
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: f2070100
+    m_LastClickedInstanceID: 67570
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000ce9d00004cfc0300a0630000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: GfxClickable
+      m_OriginalName: GfxClickable
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 123852
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 11}
     m_CreateAssetUtility:
