@@ -104,7 +104,7 @@ public class PlayerController : TurnController {
         var moved = await selectedUnit.Move(new Coord(x, y));
         if (!moved) return;
 
-        mapController.map.Navigate(x, y, selectedUnit.attributes.range,
+        mapController.map.FloodFill(x, y, selectedUnit.attributes.range,
          (t, x1, y1) => {
             if (t.unit != null && t.unit is EnemyUnit) {
                 selectedEnemy = t.unit;
