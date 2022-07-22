@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,7 @@ public class MapTester : MonoBehaviour {
     }
     (int, int) selected;
     void OnClick(){
+        path = new Stack<(int, int)>();
         mapController.ResetSelection();
         (var x, var y, var b) = mapController.EvaluateMouse();
         if(!b) return;
@@ -30,13 +32,20 @@ public class MapTester : MonoBehaviour {
         // });
     }
 
+    Stack<(int, int)> path = new Stack<(int, int)>();
+
     void OnRightClick(){
         (var x, var y, var b) = mapController.EvaluateMouse();
         if(!b || selected == (x, y)) return;
-        var path = mapController.map.AStar(selected, (x, y), 
+        IterPath(t => t.Active());
+        path = mapController.map.AStar(selected, (x, y), 
         t => t.const_compound);
+        IterPath(t => t.Highlight());
+    }
+
+    void IterPath(Action<Tile> fn){
         foreach(var c in path){
-            mapController.map[c].Highlight();
+            fn(mapController.map[c]);
         }
     }
 }
