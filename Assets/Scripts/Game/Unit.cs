@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -17,6 +18,10 @@ public class Unit : MonoBehaviour {
 	public int hp;
 	WorldHUD hud;
 	public bool alive = true;
+	public Vector2 pos{
+		get => transform.position;
+		set => transform.position = value;
+	}
 
 	void Awake(){
 		hud = GetComponentInChildren<WorldHUD>();
@@ -45,7 +50,7 @@ public class Unit : MonoBehaviour {
 		SetHasMoved(false);
 	}
 
-	public bool Move(Coord p){
+	public async Task<bool> Move(Coord p){
 		var map = MapController.instance.map;
 		if(map[p].unit != null){
 			if(map[p].unit == this){
@@ -56,10 +61,17 @@ public class Unit : MonoBehaviour {
 			Debug.LogError("Already occupied");
 			return false;
 		}
+		
+		var path = map.AStar(coord, p, t => t.const_compound);
 		map[coord].unit = null;
 		coord = p;
 		map[coord].unit = this;
-		transform.position = MapController.instance.map.CoordToWorldPoint(coord);
+		SetHasMoved(false);
+		foreach(var c in path){
+			var npos = map.CoordToWorldPoint(c);
+			await AsyncTweener.Tween(.1f, t => pos = Vector2.Lerp(pos, npos, t));
+		}
+		
 		SetHasMoved(true);
 
 		return true;

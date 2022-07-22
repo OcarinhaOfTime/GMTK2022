@@ -28,7 +28,7 @@ public class PlayerController : TurnController {
         mapController = MapController.instance;
         foreach (var u in units) u.Setup();
         var cm = ControlManager.instance;
-        cm.onMouseDown.AddListener(Process);
+        cm.onMouseDown.AddListener(async (k) => await Process(k));
         cm.mainControl.Player.PassTurn.performed += ctx => endTurn = true;
         CameraController.instance.FocusImmediate(units[0].transform.position);
     }
@@ -51,7 +51,7 @@ public class PlayerController : TurnController {
         print($"{x}x{y} {b}");
     }
 
-    void Process(Vector2 mpos) {
+    async Task Process(Vector2 mpos) {
         this.mpos = mpos;
         if (endTurn || waiting) return;
         switch (state) {
@@ -60,7 +60,7 @@ public class PlayerController : TurnController {
                 break;
 
             case ControlState.UnitMoving:
-                UnitSelected();
+                await UnitSelected();
                 break;
 
             case ControlState.UnitEngaged:
@@ -82,7 +82,6 @@ public class PlayerController : TurnController {
         if(u == null || u.hasMoved || u is EnemyUnit){
             return;
         }
-
         
         option = await WorldUI.instance.Evaluate(u.coord, 0, 2);           
 
@@ -93,7 +92,7 @@ public class PlayerController : TurnController {
         } 
     }
 
-    void UnitSelected() {
+    async Task UnitSelected() {
         (var x, var y, var b) = mapController.EvaluateMouse();
         if (!b) return;        
         if (!mapController.selectedTiles.Contains((x, y))) return;
@@ -102,7 +101,8 @@ public class PlayerController : TurnController {
         
         state = ControlState.Idle;
         selectedUnit.SetHasMoved(true);
-        if (!selectedUnit.Move(new Coord(x, y))) return;
+        var moved = await selectedUnit.Move(new Coord(x, y));
+        if (!moved) return;
 
         mapController.map.Navigate(x, y, selectedUnit.attributes.range,
          (t, x1, y1) => {
