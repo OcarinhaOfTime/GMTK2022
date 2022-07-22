@@ -48,6 +48,15 @@ public class Map<T> : IEnumerable<T> {
         }
     }
 
+    public T this[(int, int) c] {
+        get {
+            return map[c.Item1, c.Item2];
+        }
+        set {
+            map[c.Item1, c.Item2] = value;
+        }
+    }
+
     public T this[Coord coord] {
         get {
             return map[coord.x, coord.y];
@@ -100,26 +109,93 @@ public class Map<T> : IEnumerable<T> {
 
         foreach((var x, var y) in points){
             if(map.IsInMapRange(x, y)) onEach(map[x, y], x, y);
+        }        
+    }
+
+    public void IterQuad((int , int) c, Action<T, int, int> onEach){
+        (var x0, var y0) = c;
+        var points = new (int, int)[4]{
+            (x0+1, y0),
+            (x0, y0+1),
+            (x0-1, y0),
+            (x0, y0-1)
+        };
+
+        foreach((var x, var y) in points){
+            if(map.IsInMapRange(x, y)) onEach(map[x, y], x, y);
+        }        
+    }
+
+    Stack<(int, int)> ReconstructPath(
+        Dict<(int, int), (int, int)> origin, (int, int) s, (int, int) e){
+        var path = new Stack<(int, int)>();
+        var i = e;
+        while(i != s){
+            path.Push(i);
+            i = origin[i];
         }
-        
+        path.Push(s);
+        return path;
     }
 
-    HashSet<(int, int)> mem;
-    public void FloodFill(int x0, int y0, int k, Action<T, int, int> fn){
-        mem = new HashSet<(int, int)>();
-        //mem.Add((x0, y0));
-        //fn(map[x0, y0], x0, y0);
-        FloodFillRecur(x0, y0, k, fn);
+    public Stack<(int, int)> AStar((int, int) s, (int, int) e, Func<T, int> cost_fn){
+        PriorityQueue<(int, int)> openSet = new PriorityQueue<(int, int)>();
+        var closedMap = new Dict<(int, int), bool>(false);
+        var origin  = new Dict<(int, int), (int, int)>();
+        var gScore = new Dict<(int, int), float>(Mathf.Infinity);
+        var fScore = new Dict<(int, int), float>(Mathf.Infinity);
+
+        gScore[s] = 0;
+        fScore[s] = s.MDist(e);
+        openSet.Enqueue(s, fScore[s]);
+
+        while(!openSet.Empty){
+            var c = openSet.Dequeue();
+            closedMap[c] = true;
+
+            if(c == e) return ReconstructPath(origin, s, e);
+
+            IterQuad(c, (t, x, y) => {
+                if(closedMap[(x, y)]) return;
+                float g = gScore[c] + cost_fn(t);
+                if(g < gScore[(x, y)]){
+                    origin[(x, y)] = c;
+                    gScore[(x, y)] = g;
+                    fScore[(x, y)] = g + (x, y).MDist(e);
+                }
+                openSet.Enqueue((x, y), fScore[(x, y)]);
+            });            
+        }
+
+        throw new Exception("No path found");
     }
 
-    public void FloodFillRecur(int x0, int y0, int k, Action<T, int, int> fn){
-        if(mem.Contains((x0, y0)) || k < 0) return;
+    
+    public void FloodFill(int x0, int y0, int k, Action<T, int, int> fn, Func<T, int> cost_fn){
+        HashSet<(int, int)> mem = new HashSet<(int, int)>();
+        Queue<(int, int, int)> q = new Queue<(int, int, int)>();
+        mem.Clear();
         mem.Add((x0, y0));
         fn(map[x0, y0], x0, y0);
-        IterQuad(x0, y0, (t, x, y) => {
-            FloodFillRecur(x, y, k-1, fn);
-        });
+        IterQuad(x0, y0, (t, x, y) => q.Enqueue((x, y, k-cost_fn(t))));
+        while(q.Count > 0){
+            (var x, var y, var k0) = q.Dequeue();
+            if(mem.Contains((x, y)) || k0 < 0) continue;
+            
+            mem.Add((x, y));
+            fn(map[x, y], x, y);
+            IterQuad(x, y, (t, x_, y_) => q.Enqueue((x_, y_, k0-cost_fn(t))));
+        }
     }
+
+    // public void FloodFillRecur(int x0, int y0, int k, Action<T, int, int> fn){
+    //     if(mem.Contains((x0, y0)) || k < 0) return;
+    //     mem.Add((x0, y0));
+    //     fn(map[x0, y0], x0, y0);
+    //     IterQuad(x0, y0, (t, x, y) => {
+    //         FloodFillRecur(x, y, k-1, fn);
+    //     });
+    // }
 
     public HashSet<(int, int)> Navigate(int x0, int y0, int k, Action<T, int, int> onEach, Func<T, int> cost_fn) {
         HashSet<(int, int)> mem = new HashSet<(int, int)>();
@@ -141,7 +217,7 @@ public class Map<T> : IEnumerable<T> {
         mem.Add((x0, y0));
 
         IterQuad(x0, y0, (t, x, y) => {
-            var dtest = Coord.TileDist((x, y), first_tile) <= Coord.TileDist(lastTile, first_tile);
+            var dtest = (x, y).MDist(first_tile) <= lastTile.MDist(first_tile);
             if(dtest && mem.Contains((x, y))) return;
             NavigateRecusive(x, y, k-cost_fn(t),first_tile, (x0, y0), mem, onEach, cost_fn);
         });
@@ -216,10 +292,6 @@ public class Coord {
 
     public int TileDist(Coord other) {
         return Mathf.Abs(x - other.x) + Mathf.Abs(y - other.y);
-    }
-
-    public static int TileDist((int, int) a, (int, int) b) {
-        return Mathf.Abs(a.Item1 - b.Item1) + Mathf.Abs(a.Item2 - b.Item2);
     }
 
     public bool Equals(Coord other) {

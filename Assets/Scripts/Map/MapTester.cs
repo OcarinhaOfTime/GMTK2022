@@ -7,17 +7,36 @@ public class MapTester : MonoBehaviour {
     public int k = 1;
     MapController mapController;
     void Start(){
-        ControlManager.instance.onMouseDown.AddListener(OnClick);
+        
         mapController = MapController.instance;
+        ControlManager.instance.mainControl.Player.Click.performed += 
+        ctx => OnClick();
+        ControlManager.instance.mainControl.Player.RightClick.performed += 
+        ctx => OnRightClick();
     }
-
-    void OnClick(Vector2 mpos){
+    (int, int) selected;
+    void OnClick(){
         mapController.ResetSelection();
         (var x, var y, var b) = mapController.EvaluateMouse();
         if(!b) return;
+        selected = (x, y);
         mapController.map[x, y].Active();
         mapController.map.FloodFill(x, y, k, (t, x0, y0) => {
             t.Active();
-        });
+        }, t=> t.const_compound);
+
+        // mapController.map.MapNeighborIter(new Coord(x, y), (t, x0, y0) => {
+        //     t.Active();
+        // });
+    }
+
+    void OnRightClick(){
+        (var x, var y, var b) = mapController.EvaluateMouse();
+        if(!b || selected == (x, y)) return;
+        var path = mapController.map.AStar(selected, (x, y), 
+        t => t.const_compound);
+        foreach(var c in path){
+            mapController.map[c].Highlight();
+        }
     }
 }

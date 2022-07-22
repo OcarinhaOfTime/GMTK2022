@@ -70,13 +70,6 @@ public class MapController : MonoBehaviour {
         map.MapIter((t, _, __) => t.Deactive());
     }
 
-    // public bool isOver;
-
-    // void Update(){
-    //     Vector2 p = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-    //     isOver = map.ContainsWorldPosition(p);
-    // }
-
     public (int, int, bool) EvaluateMouse(){
         Vector2 p = ControlManager.instance.mpos;
         var inside = map.ContainsWorldPosition(p);

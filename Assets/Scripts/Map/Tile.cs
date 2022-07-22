@@ -22,10 +22,11 @@ public class Tile : MonoBehaviour {
     [SerializeField] TMP_Text costt;
     //private SpriteRenderer spriteRenderer;
     public Color activeColor;
+    public Color hColor;
     public Color deactiveColor;
     public Unit unit = null;
 
-    public bool active = false;
+    //public bool active = false;
     [SerializeField]SpriteRenderer base_rdr;
     [SerializeField]SpriteRenderer detail_rdr;
     [SerializeField]SpriteRenderer overlay_rdr;
@@ -52,12 +53,14 @@ public class Tile : MonoBehaviour {
 
     public void Active() {
         overlay_rdr.color = activeColor;
-        active = true;
+    }
+
+    public void Highlight() {
+        overlay_rdr.color = hColor;
     }
 
     public void Deactive() {
         overlay_rdr.color = deactiveColor;
-        active = true;
     }
 
     [ContextMenu("Apply Sprites")]

@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
         instance = this;
     }
     void Start(){
+        music.Play();
         GameLoop();
     }
     public async void GameLoop(){
