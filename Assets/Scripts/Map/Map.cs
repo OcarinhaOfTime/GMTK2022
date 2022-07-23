@@ -171,7 +171,7 @@ public class Map<T> : IEnumerable<T> {
     }
 
     
-    public void FloodFill(int x0, int y0, int k, Action<T, int, int> fn, Func<T, int> cost_fn){
+    public HashSet<(int, int)> FloodFill(int x0, int y0, int k, Action<T, int, int> fn, Func<T, int> cost_fn){
         HashSet<(int, int)> mem = new HashSet<(int, int)>();
         Queue<(int, int, int)> q = new Queue<(int, int, int)>();
         mem.Clear();
@@ -186,42 +186,10 @@ public class Map<T> : IEnumerable<T> {
             fn(map[x, y], x, y);
             IterQuad(x, y, (t, x_, y_) => q.Enqueue((x_, y_, k0-cost_fn(t))));
         }
-    }
-
-    // public void FloodFillRecur(int x0, int y0, int k, Action<T, int, int> fn){
-    //     if(mem.Contains((x0, y0)) || k < 0) return;
-    //     mem.Add((x0, y0));
-    //     fn(map[x0, y0], x0, y0);
-    //     IterQuad(x0, y0, (t, x, y) => {
-    //         FloodFillRecur(x, y, k-1, fn);
-    //     });
-    // }
-
-    public HashSet<(int, int)> Navigate(int x0, int y0, int k, Action<T, int, int> onEach, Func<T, int> cost_fn) {
-        HashSet<(int, int)> mem = new HashSet<(int, int)>();
-        mem.Add((x0, y0));
-        onEach.Invoke(map[x0, y0], x0, y0);
-        IterQuad(x0, y0, (t, x, y) => {
-            NavigateRecusive(x, y, k-cost_fn(t),(x0, y0), (x0, y0), mem, onEach, cost_fn);
-        });
 
         return mem;
     }
 
-    public void NavigateRecusive(int x0, int y0, int k, 
-    (int, int) first_tile, (int, int) lastTile,
-    HashSet<(int, int)> mem, 
-    Action<T, int, int> onEach, Func<T, int> cost_fn) {
-        if(k < 0) return;
-        if(!mem.Contains((x0, y0))) onEach.Invoke(map[x0, y0], x0, y0);
-        mem.Add((x0, y0));
-
-        IterQuad(x0, y0, (t, x, y) => {
-            var dtest = (x, y).MDist(first_tile) <= lastTile.MDist(first_tile);
-            if(dtest && mem.Contains((x, y))) return;
-            NavigateRecusive(x, y, k-cost_fn(t),first_tile, (x0, y0), mem, onEach, cost_fn);
-        });
-    }
 
     public void MapNeighborIter(Coord tile, Action<T, int, int> onEach) {
         for(int x = tile.x - 1; x <= tile.x + 1; x++) {

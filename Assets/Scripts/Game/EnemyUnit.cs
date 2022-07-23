@@ -74,7 +74,7 @@ public class EnemyUnit : Unit {
         var map = MapController.instance.map;
         var d = 999f;
         var c = coord;
-        map.Navigate(coord.x, coord.y, attributes.move * 2,
+        map.FloodFill(coord.x, coord.y, attributes.move * 2,
         (t, x, y) => {
             var _d = t.coord.TileDist(target.coord);
             if (_d < d) {
@@ -85,7 +85,7 @@ public class EnemyUnit : Unit {
         t => t.const_compound);
 
         await AsyncTweener.Wait(.5f);
-        Move(c);
+        await Move(c);
         await AsyncTweener.Wait(.5f);
         await TryToAttack();
         SetHasMoved(true);
