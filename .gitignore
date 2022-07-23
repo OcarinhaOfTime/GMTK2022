@@ -84,3 +84,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 /UserSettings/EditorUserSettings.asset
+
+# unity stuff
+/UserSettings/Layouts/default-2022.dwlt
