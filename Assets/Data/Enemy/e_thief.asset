@@ -18,3 +18,8 @@ MonoBehaviour:
   move: 3
   range: 1
   sprite: {fileID: -1236890389, guid: 280fe3a0cc6dbac40901f9405c43ba2f, type: 3}
+  sprite_dirs:
+  - {fileID: 2028496590, guid: 8a94f83a1e859454988c280e782d9c0b, type: 3}
+  - {fileID: -1045993709, guid: 8a94f83a1e859454988c280e782d9c0b, type: 3}
+  - {fileID: -104491828, guid: 8a94f83a1e859454988c280e782d9c0b, type: 3}
+  - {fileID: -1960034534, guid: 8a94f83a1e859454988c280e782d9c0b, type: 3}

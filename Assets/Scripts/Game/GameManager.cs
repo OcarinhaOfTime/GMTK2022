@@ -26,17 +26,22 @@ public class GameManager : MonoBehaviour {
     public async void GameLoop(){
         gameEnded = false;
         foreach(var c in controllers) c.Setup();
-        await UI.instance.ShowMessage("Game Start");
+        var ui = UI.instance;
+        await ui.ShowPanel(0);
+        await ui.ShowAnimatedMsg("Game Start");
         currentControllerIndex = 0;
         while(Application.isPlaying && !gameEnded){
-            await UI.instance.ShowMessage($"{currentController.controllerName}'s Turn", currentController.controllerColor);
+            await ui.ShowAnimatedMsg($"{currentController.controllerName}'s Turn");
+            await ui.ClosePanel();
             await currentController.PerformTurn();
             currentControllerIndex = (currentControllerIndex + 1) % controllers.Length;
             foreach(var c in controllers) gameEnded |= c.EvaluateLoseCondition();
             if(gameEnded) break;
-            await UI.instance.ShowMessage("Changing Turn");            
+            await ui.ShowPanel(currentController.teamID);
+            await ui.ShowAnimatedMsg("Changing Turn");            
         }
-
+        
+        await ui.ClosePanel();
         music.Stop();
         music.loop = false;
         

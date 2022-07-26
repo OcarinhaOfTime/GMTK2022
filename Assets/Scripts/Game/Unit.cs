@@ -68,8 +68,13 @@ public class Unit : MonoBehaviour {
 		map[coord].unit = this;
 		SetHasMoved(false);
 		foreach(var c in path){
+			var opos = pos;
 			var npos = map.CoordToWorldPoint(c);
-			await AsyncTweener.Tween(.1f, t => pos = Vector2.Lerp(pos, npos, t));
+			var dir = (npos - opos).normalized;
+			spriteRenderer.sprite = attributes.SpriteFromDir(dir);
+			await AsyncTweener.Tween(.1f, t => {
+				pos = Vector2.Lerp(pos, npos, t);
+			});
 		}
 		
 		SetHasMoved(true);
