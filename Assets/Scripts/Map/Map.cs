@@ -57,7 +57,7 @@ public class Map<T> : IEnumerable<T> {
         }
     }
 
-    public T this[Coord coord] {
+    public T this[Vector2Int coord] {
         get {
             return map[coord.x, coord.y];
         }
@@ -67,16 +67,21 @@ public class Map<T> : IEnumerable<T> {
     }
 
 
-    public Vector2 CoordToWorldPoint(Coord tile) {
+    public Vector2 CoordToWorldPoint(Vector2Int tile) {
         return new Vector2(-width / 2 + .5f + tile.x, -height / 2 + .5f + tile.y);
+    }
+
+    public Vector2 CoordToWorldPoint((int, int) c) {
+        (var x, var y) = c;
+        return new Vector2(-width / 2 + .5f + x, -height / 2 + .5f + y);
     }
 
     public static Vector2 CoordToWorldPoint(int x, int y, int w, int h) {
         return new Vector2(-w / 2 + .5f + x, -h / 2 + .5f + y);
     }
 
-    public Coord WorldPointToCoord(Vector2 pos) {
-        return new Coord(Mathf.FloorToInt(pos.x + width / 2), Mathf.FloorToInt(pos.y + height / 2));
+    public Vector2Int WorldPointToCoord(Vector2 pos) {
+        return new Vector2Int(Mathf.FloorToInt(pos.x + width / 2), Mathf.FloorToInt(pos.y + height / 2));
     }
 
     public bool ContainsWorldPosition(Vector2 pos){
@@ -112,6 +117,19 @@ public class Map<T> : IEnumerable<T> {
         }        
     }
 
+    public void IterQuad(Vector2Int v, Action<T, Vector2Int> onEach){
+        var points = new Vector2Int[4]{
+            v+Vector2Int.right,
+            v+Vector2Int.up,
+            v+Vector2Int.left,
+            v+Vector2Int.down
+        };
+
+        foreach(var p in points){
+            if(map.IsInMapRange(p)) onEach(this[p], p);
+        }        
+    }
+
     public void IterQuad((int , int) c, Action<T, int, int> onEach){
         (var x0, var y0) = c;
         var points = new (int, int)[4]{
@@ -126,9 +144,9 @@ public class Map<T> : IEnumerable<T> {
         }        
     }
 
-    Stack<(int, int)> ReconstructPath(
-        Dict<(int, int), (int, int)> origin, (int, int) s, (int, int) e){
-        var path = new Stack<(int, int)>();
+    Stack<Vector2Int> ReconstructPath(
+        Dict<Vector2Int, Vector2Int> origin, Vector2Int s, Vector2Int e){
+        var path = new Stack<Vector2Int>();
         var i = e;
         while(i != s){
             path.Push(i);
@@ -138,12 +156,12 @@ public class Map<T> : IEnumerable<T> {
         return path;
     }
 
-    public Stack<(int, int)> AStar((int, int) s, (int, int) e, Func<T, int> cost_fn){
-        PriorityQueue<(int, int)> openSet = new PriorityQueue<(int, int)>();
-        var closedMap = new Dict<(int, int), bool>(false);
-        var origin  = new Dict<(int, int), (int, int)>();
-        var gScore = new Dict<(int, int), float>(Mathf.Infinity);
-        var fScore = new Dict<(int, int), float>(Mathf.Infinity);
+    public Stack<Vector2Int> AStar(Vector2Int s, Vector2Int e, Func<T, int> cost_fn){
+        PriorityQueue<Vector2Int> openSet = new PriorityQueue<Vector2Int>();
+        var closedMap = new Dict<Vector2Int, bool>(false);
+        var origin  = new Dict<Vector2Int, Vector2Int>();
+        var gScore = new Dict<Vector2Int, float>(Mathf.Infinity);
+        var fScore = new Dict<Vector2Int, float>(Mathf.Infinity);
 
         gScore[s] = 0;
         fScore[s] = s.MDist(e);
@@ -155,15 +173,15 @@ public class Map<T> : IEnumerable<T> {
 
             if(c == e) return ReconstructPath(origin, s, e);
 
-            IterQuad(c, (t, x, y) => {
-                if(closedMap[(x, y)]) return;
+            IterQuad(c, (t, p) => {
+                if(closedMap[p]) return;
                 float g = gScore[c] + cost_fn(t);
-                if(g < gScore[(x, y)]){
-                    origin[(x, y)] = c;
-                    gScore[(x, y)] = g;
-                    fScore[(x, y)] = g + (x, y).MDist(e);
+                if(g < gScore[p]){
+                    origin[p] = c;
+                    gScore[p] = g;
+                    fScore[p] = g + p.MDist(e);
                 }
-                openSet.Enqueue((x, y), fScore[(x, y)]);
+                openSet.Enqueue(p, fScore[p]);
             });            
         }
 
@@ -191,7 +209,7 @@ public class Map<T> : IEnumerable<T> {
     }
 
 
-    public void MapNeighborIter(Coord tile, Action<T, int, int> onEach) {
+    public void MapNeighborIter(Vector2Int tile, Action<T, int, int> onEach) {
         for(int x = tile.x - 1; x <= tile.x + 1; x++) {
             for(int y = tile.y - 1; y <= tile.y + 1; y++) {
                 if(map.IsInMapRange(x, y) && (y == tile.y || x == tile.x)) {
@@ -201,17 +219,17 @@ public class Map<T> : IEnumerable<T> {
         }
     }
 
-    public void MapNeighborIter(Coord tile, Action<T, Coord> onEach) {
+    public void MapNeighborIter(Vector2Int tile, Action<T, Vector2Int> onEach) {
         for(int x = tile.x - 1; x <= tile.x + 1; x++) {
             for(int y = tile.y - 1; y <= tile.y + 1; y++) {
                 if(map.IsInMapRange(x, y) && (y == tile.y || x == tile.x)) {
-                    onEach.Invoke(map[x, y], new Coord(x, y));
+                    onEach.Invoke(map[x, y], new Vector2Int(x, y));
                 }
             }
         }
     }
 
-    public int ObstacleInNeighborHood(Coord tile, T obstacle) {
+    public int ObstacleInNeighborHood(Vector2Int tile, T obstacle) {
         int obstacles = 0;
         for(int x = tile.x - 1; x <= tile.x + 1; x++) {
             for(int y = tile.y - 1; y <= tile.y + 1; y++) {
@@ -237,50 +255,12 @@ public class Map<T> : IEnumerable<T> {
     }
 }
 
-[System.Serializable]
-public class Coord {
-    public int x;
-    public int y;
-
-    public Coord() {
-    }
-
-    public Coord(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public float DistSqrt(Coord other) {
-        return Mathf.Pow(x - other.x, 2) + Mathf.Pow(y - other.y, 2);
-    }
-
-    public float Dist(Coord other) {
-        return Mathf.Sqrt(DistSqrt(other));
-    }
-
-    public int TileDist(Coord other) {
-        return Mathf.Abs(x - other.x) + Mathf.Abs(y - other.y);
-    }
-
-    public bool Equals(Coord other) {
-        return x == other.x && y == other.y;
-    }
-
-    public override string ToString() {
-        return "{ " + x + ", " + y + " }";
-    }
-
-    public static implicit operator (int, int)(Coord c){
-        return (c.x, c.y);
-    }
-
-    public static implicit operator Coord((int, int) c){
-        return new Coord(c.Item1, c.Item2);
-    }
-}
-
-public static class ArrayExtention {
+public static class MapExtention {
     public static bool IsInMapRange<T>(this T[,] map, int x, int y) {
         return x >= 0 && x < map.GetLength(0) && y >= 0 && y < map.GetLength(1);
+    }
+
+    public static bool IsInMapRange<T>(this T[,] map, Vector2Int p) {
+        return map.IsInMapRange(p.x, p.y);
     }
 }

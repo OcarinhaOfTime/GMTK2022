@@ -42,7 +42,7 @@ public class MapController : MonoBehaviour {
         inst.transform.localPosition = p;
         inst.name = $"{x}x{y}";
         inst.gameObject.SetActive(true);
-        inst.coord = new Coord(x, y);        
+        inst.coord = new Vector2Int(x, y);        
         inst.Deactive();
         inst.HideSprites();
         return inst;

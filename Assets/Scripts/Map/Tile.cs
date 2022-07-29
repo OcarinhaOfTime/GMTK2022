@@ -5,17 +5,9 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour {
     public HideFlags customHideFlags;
-    public Coord coord;
-    public int x {
-        get {
-            return coord.x;
-        }
-    }
-    public int y {
-        get {
-            return coord.y;
-        }
-    }
+    public Vector2Int coord;
+    public int x => coord.x;
+    public int y => coord.y;
     public int cost = 1;
     public int const_compound => cost + (unit != null ? 999 : 0);
     public int cost_value { set { costt.text = "" + value; cost = value; } }

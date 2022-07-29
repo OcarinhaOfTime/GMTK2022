@@ -34,7 +34,7 @@ public class WorldUI : MonoBehaviour {
         waiting = false;
     }
 
-    public async Task<int> Evaluate(Coord c, params int[] sprite_is){
+    public async Task<int> Evaluate(Vector2Int c, params int[] sprite_is){
         var p = MapController.instance.map.CoordToWorldPoint(c);
         canvas.transform.position = p + Vector2.up * 1.2f;
         canvas.gameObject.SetActive(true);
@@ -52,8 +52,10 @@ public class WorldUI : MonoBehaviour {
         return clickedButton;
     }
 
-    public void Close(){
+    public async Task Close(){
         clickedButton = -1;
         waiting = false;
+
+        await Task.Yield();
     }
 }

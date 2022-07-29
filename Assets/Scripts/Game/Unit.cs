@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class Unit : MonoBehaviour {
 	public string team;
 	public int teamID;
-	public Coord coord;
+	public Vector2Int coord;
 	public bool active = false;
 	[SerializeField] SpriteRenderer spriteRenderer;
 	Collider col;
@@ -23,12 +23,27 @@ public class Unit : MonoBehaviour {
 		set => transform.position = value;
 	}
 
+	public int facingIdx = 0;
+	public Vector2Int[] facingDirs = {
+		Vector2Int.down,
+		Vector2Int.right,
+		Vector2Int.left,
+		Vector2Int.up
+	};
+	public Vector2Int facingDir => facingDirs[facingIdx];
+
 	void Awake(){
 		hud = GetComponentInChildren<WorldHUD>();
 		col = GetComponent<Collider>();
 		hp = max_hp;
 		hud.hp_fill = 1;
 		spriteRenderer.color = Color.white;
+	}
+
+	public void SetLook((int, int) target){
+		var a = Vector2Int.right;
+		var b = Vector2Int.up;
+		//Vector2Int.
 	}
 
 	public void Setup(){
@@ -50,7 +65,7 @@ public class Unit : MonoBehaviour {
 		SetHasMoved(false);
 	}
 
-	public async Task<bool> Move(Coord p){
+	public async Task<bool> Move(Vector2Int p){
 		var map = MapController.instance.map;
 		if(map[p].unit != null){
 			if(map[p].unit == this){

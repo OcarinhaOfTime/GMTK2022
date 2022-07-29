@@ -5,14 +5,36 @@ using TMPro;
 using UnityEngine;
 
 public class HUD : MonoBehaviour {
+    public static HUD instance;
     [SerializeField]GameObject canvas;
     [SerializeField]TMP_Text[] val_txts;
     [SerializeField]TMP_Text title;
     [SerializeField]BlinkSprite target;
+    [SerializeField]BlinkSprite atk_target;
+    GenericPool<Poolable> targetPool;
 
-    void Start(){
+    void Awake(){
+        instance = this;
+        targetPool = new GenericPool<Poolable>();
+        targetPool.Setup(8, atk_target.GetComponent<Poolable>(), atk_target.transform.parent);
+    }
+    void Start(){        
         canvas.SetActive(false);
         ControlManager.instance.onMouseDown.AddListener(OnClick);
+    }
+
+    public void ActivateTargets(List<(int, int)> ps){
+        foreach((var x, var y) in ps){
+            var plb = targetPool.GetPoolable();
+            var blink = plb.GetComponent<BlinkSprite>();
+            blink.t0 = 0;
+            plb.transform.position = MapController.instance.map.CoordToWorldPoint((x, y));
+            plb.gameObject.SetActive(true);
+        }
+    }
+
+    public void DeactivateTargets(){
+        targetPool.RecycleAll();
     }
 
     void OnClick(Vector2 mpos){
@@ -21,7 +43,7 @@ public class HUD : MonoBehaviour {
         print("Clicked!!!");
         var map = MapController.instance;
         (var x, var y, var b) = map.EvaluateMouse();
-        var p = map.map.CoordToWorldPoint(new Coord(x, y));
+        var p = map.map.CoordToWorldPoint((x, y));
         target.transform.position = p;
         canvas.SetActive(false);
         if(!b) return;

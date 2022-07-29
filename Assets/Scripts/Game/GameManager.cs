@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public async Task Battle(Unit a, Unit b){
-        var dist = a.coord.TileDist(b.coord);
+        var dist = a.coord.MDist(b.coord);
         print($"{a.team}'s {a.attributes.className} attacked {b.attributes.className}");
         await AsyncTweener.Wait(.25f);
         if(a.attributes.range >= dist){

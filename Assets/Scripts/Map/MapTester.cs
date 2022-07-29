@@ -35,12 +35,12 @@ public class MapTester : MonoBehaviour {
     Stack<(int, int)> path = new Stack<(int, int)>();
 
     void OnRightClick(){
-        (var x, var y, var b) = mapController.EvaluateMouse();
-        if(!b || selected == (x, y)) return;
-        IterPath(t => t.Active());
-        path = mapController.map.AStar(selected, (x, y), 
-        t => t.const_compound);
-        IterPath(t => t.Highlight());
+        // (var x, var y, var b) = mapController.EvaluateMouse();
+        // if(!b || selected == (x, y)) return;
+        // IterPath(t => t.Active());
+        // path = mapController.map.AStar(selected, (x, y), 
+        // t => t.const_compound);
+        // IterPath(t => t.Highlight());
     }
 
     void IterPath(Action<Tile> fn){

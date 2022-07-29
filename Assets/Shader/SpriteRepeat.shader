@@ -73,7 +73,7 @@ Shader "Unlit/SpriteRepeat"
 
             float4 frag (v2f i) : SV_Target
             {
-                float t = -_Time.y * _Speed;
+                float t = _Time.y * _Speed;
                 float2 uv = i.uv;
                 uv.x = frac(uv.x * _Size + t);
                 float4 col = tex2D(_MainTex, uv) * i.color;

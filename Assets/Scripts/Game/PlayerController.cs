@@ -19,6 +19,7 @@ public class PlayerController : TurnController {
     Vector2 mpos;
     Unit selectedUnit;
     Unit selectedEnemy;
+    public List<(int, int)> reachableTiles = new List<(int, int)>();
 
     public override Unit[] main_units => units.Where(u => u.alive).ToArray();
 
@@ -74,7 +75,7 @@ public class PlayerController : TurnController {
     }
 
     async Task ProcessMap(){
-        WorldUI.instance.Close();
+        await WorldUI.instance.Close();
         (var x, var y, var b) = mapController.EvaluateMouse();
         if(!b) return;
         var u = mapController.map[x, y].unit;
@@ -86,6 +87,7 @@ public class PlayerController : TurnController {
         option = await WorldUI.instance.Evaluate(u.coord, 0, 2);           
 
         if(option == 0){
+            print("We moving " + u.attributes.className);
             state = ControlState.UnitMoving;
             var m = await DiceManager.instance.RollD6(u.attributes.move, 0);
             mapController.OnClickTile(u.coord.x, u.coord.y, m);
@@ -101,17 +103,24 @@ public class PlayerController : TurnController {
         
         state = ControlState.Idle;
         selectedUnit.SetHasMoved(true);
-        var moved = await selectedUnit.Move(new Coord(x, y));
+        var moved = await selectedUnit.Move(new Vector2Int(x, y));
         if (!moved) return;
 
+        reachableTiles.Clear();
         mapController.map.FloodFill(x, y, selectedUnit.attributes.range,
          (t, x1, y1) => {
             if (t.unit != null && t.unit is EnemyUnit) {
-                selectedEnemy = t.unit;
-                selectedUnit.SetHasMoved(false);
-                Battle();
+                reachableTiles.Add(t.unit.coord.ToTuple());                
             }
         }, t => 1);
+
+        if(reachableTiles.Count <= 0) return;
+        HUD.instance.ActivateTargets(reachableTiles);
+        state = ControlState.UnitEngaged;
+
+        //selectedEnemy = t.unit;
+        //selectedUnit.SetHasMoved(false);
+        //Battle();
     }
 
     async void Battle(){
@@ -128,14 +137,20 @@ public class PlayerController : TurnController {
     }
 
     async void UnitEngaged() {
+        HUD.instance.DeactivateTargets();
         state = ControlState.Idle;
         selectedUnit.SetHasMoved(true);
 
-        // (var x, var y, var b) = mapController.EvaluateMouse();
-        // if (!b) return;
+        (var x, var y, var b) = mapController.EvaluateMouse();
+        if (!b) return;
+        if(!reachableTiles.Contains((x, y))) return;
+        selectedEnemy = mapController.map[x, y].unit;
 
-        
-        
+        waiting = true;
+        selectedUnit.SetHasMoved(false);
+        await GameManager.instance.Battle(selectedUnit, selectedEnemy);
+        selectedUnit.SetHasMoved(true);
+        waiting = false;
     //     var t = mapController.map[x, y];
     //     if (t.unit != null && t.unit is EnemyUnit) {
     //         selectedUnit.SetHasMoved(false);
