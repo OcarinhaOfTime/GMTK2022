@@ -19,7 +19,7 @@ public class PlayerController : TurnController {
     Vector2 mpos;
     Unit selectedUnit;
     Unit selectedEnemy;
-    public List<(int, int)> reachableTiles = new List<(int, int)>();
+    public List<Vector2Int> reachableTiles = new List<Vector2Int>();
 
     public override Unit[] main_units => units.Where(u => u.alive).ToArray();
 
@@ -83,7 +83,7 @@ public class PlayerController : TurnController {
         mapController.ResetSelection();
         selectedTiles = map.FloodFillAtk(
             x, y, k, (t, x0, y0) => t.Active(), t => t.const_compound,
-            u.attributes.range, (t, x, y) => t.Highlight());
+            u.attributes.range, (t, x, y) => {});
     }
 
     async Task ProcessMap(){
@@ -119,33 +119,47 @@ public class PlayerController : TurnController {
         if (!moved) return;
 
         reachableTiles.Clear();
-        mapController.map.FloodFill(x, y, selectedUnit.attributes.range,
-         (t, x1, y1) => {
-            if (t.unit != null && t.unit is EnemyUnit) {
-                reachableTiles.Add(t.unit.coord.ToTuple());                
-            }
-        }, t => 1);
+        if(selectedUnit.attributes.className != "Cleric"){
+            reachableTiles = GetReachableTiles(x, y);
+            if(reachableTiles.Count <= 0) return;
+            HUD.instance.ActivateTargets(reachableTiles);
+        }else{
+            reachableTiles = GetReachableTilesCleric(x, y);
+            if(reachableTiles.Count <= 0) return;
+            HUD.instance.ActivateTargets(reachableTiles, Color.green);
+        }
+        
 
-        if(reachableTiles.Count <= 0) return;
-        HUD.instance.ActivateTargets(reachableTiles);
+        
         state = ControlState.UnitEngaged;
 
         //selectedEnemy = t.unit;
         //selectedUnit.SetHasMoved(false);
         //Battle();
+    }    
+
+    List<Vector2Int> GetReachableTiles(int x, int y){
+        var rt = new List<Vector2Int>();
+        mapController.map.FloodFill(x, y, selectedUnit.attributes.range,
+         (t, x1, y1) => {
+            if (t.unit != null && t.unit is EnemyUnit) {
+                rt.Add(t.unit.coord);                
+            }
+        }, t => 1);
+
+        return rt;
     }
 
-    async void Battle(){
-        waiting = true;
-        option = await WorldUI.instance.Evaluate(selectedUnit.coord, 1, 2);
-        waiting = false;
-        if(option == 0){
-            selectedUnit.SetHasMoved(false);
-            await GameManager.instance.Battle(selectedUnit, selectedEnemy);
-            selectedUnit.SetHasMoved(true);
-        }else{
-            selectedUnit.SetHasMoved(true);
-        }
+    List<Vector2Int> GetReachableTilesCleric(int x, int y){
+        var rt = new List<Vector2Int>();
+        mapController.map.FloodFill(x, y, selectedUnit.attributes.range,
+         (t, x1, y1) => {
+            if (t.unit != null && t.unit is PlayerUnit) {
+                rt.Add(t.unit.coord);                
+            }
+        }, t => 1);
+
+        return rt;
     }
 
     async void UnitEngaged() {
@@ -155,20 +169,24 @@ public class PlayerController : TurnController {
 
         (var x, var y, var b) = mapController.EvaluateMouse();
         if (!b) return;
-        if(!reachableTiles.Contains((x, y))) return;
-        selectedEnemy = mapController.map[x, y].unit;
+        if(!reachableTiles.Contains(new Vector2Int(x, y))) return;
 
-        waiting = true;
-        selectedUnit.SetHasMoved(false);
-        await GameManager.instance.Battle(selectedUnit, selectedEnemy);
+        if(selectedUnit.attributes.className != "Cleric"){
+            selectedEnemy = mapController.map[x, y].unit;
+            waiting = true;
+            selectedUnit.SetHasMoved(false);
+            await GameManager.instance.Battle(selectedUnit, selectedEnemy);
+        }else{
+            var sunit = mapController.map[x, y].unit;
+            waiting = true;
+            var h = await DiceManager.instance.RollD6(1, 0, 1);
+            sunit.Heal(h);
+            selectedUnit.SetHasMoved(false);
+        }
+
+        
         selectedUnit.SetHasMoved(true);
         waiting = false;
-    //     var t = mapController.map[x, y];
-    //     if (t.unit != null && t.unit is EnemyUnit) {
-    //         selectedUnit.SetHasMoved(false);
-    //         await GameManager.instance.Battle(selectedUnit, selectedEnemy);
-    //         selectedUnit.SetHasMoved(true);
-    //     }
     }
 
     public override bool EvaluateLoseCondition() {
@@ -180,4 +198,17 @@ public class PlayerController : TurnController {
             endTurn = true;
         }
     }
+
+    // async void Battle(){
+    //     waiting = true;
+    //     option = await WorldUI.instance.Evaluate(selectedUnit.coord, 1, 2);
+    //     waiting = false;
+    //     if(option == 0){
+    //         selectedUnit.SetHasMoved(false);
+    //         await GameManager.instance.Battle(selectedUnit, selectedEnemy);
+    //         selectedUnit.SetHasMoved(true);
+    //     }else{
+    //         selectedUnit.SetHasMoved(true);
+    //     }
+    // }
 }

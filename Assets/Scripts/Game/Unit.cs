@@ -35,8 +35,8 @@ public class Unit : MonoBehaviour {
 	void Awake(){
 		hud = GetComponentInChildren<WorldHUD>();
 		col = GetComponent<Collider>();
-		hp = max_hp;
-		hud.hp_fill = 1;
+		hp = max_hp / 2;
+		hud.hp_fill = hp / (float)max_hp;
 		spriteRenderer.color = Color.white;
 	}
 
@@ -119,7 +119,6 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void TakeDamage(int damage){
-
 		if(!alive) return;
 		hp -= damage;
 		hp = Mathf.Max(0, hp);
@@ -128,6 +127,13 @@ public class Unit : MonoBehaviour {
 		if(hp <= 0){
 			Die();
 		}
+	}
+
+	public void Heal(int ammount){
+		hp += ammount;
+		hp = Mathf.Max(0, hp);
+		hud.hp_fill = hp / (float)max_hp;
+		VFXManager.instance.ShowHealFX(coord);
 	}
 
 	void OnValidate(){

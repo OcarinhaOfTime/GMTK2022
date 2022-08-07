@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   className: Cleric
   hp: 6
-  atk: 1
+  atk: 0
   move: 1
   range: 1
   sprite: {fileID: -71697310, guid: 52879eac13c852a4fad99808ad3919c8, type: 3}

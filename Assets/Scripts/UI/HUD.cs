@@ -23,12 +23,17 @@ public class HUD : MonoBehaviour {
         ControlManager.instance.onMouseDown.AddListener(OnClick);
     }
 
-    public void ActivateTargets(List<(int, int)> ps){
-        foreach((var x, var y) in ps){
+    public void ActivateTargets(List<Vector2Int> ps){
+        ActivateTargets(ps, Color.red);
+    }
+
+    public void ActivateTargets(List<Vector2Int> ps, Color c){
+        foreach(var p in ps){
             var plb = targetPool.GetPoolable();
             var blink = plb.GetComponent<BlinkSprite>();
             blink.t0 = 0;
-            plb.transform.position = MapController.instance.map.CoordToWorldPoint((x, y));
+            blink.color = c;
+            plb.transform.position = MapController.instance.map.CoordToWorldPoint(p);
             plb.gameObject.SetActive(true);
         }
     }
