@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DiceManager : MonoBehaviour {    
     public static DiceManager instance;
@@ -15,6 +16,9 @@ public class DiceManager : MonoBehaviour {
     public int ndices = 4;
     [SerializeField]TMP_Text result_txt;
     [SerializeField]CanvasGroup result_cg;
+    [SerializeField]Sprite[] curtain_sprites;
+    [SerializeField]CanvasGroup curtain_cg;
+    [SerializeField]Image dice_curtain;
     public float spacing = 3;
     bool working = false;
     bool clicked_out;
@@ -57,7 +61,8 @@ public class DiceManager : MonoBehaviour {
     //     return await RollD6(k, vdices);
     // }
 
-    public async Task<int> RollD6(int k, int team){
+    public async Task<int> RollD6(int k, int team, int typ=0){
+        dice_curtain.sprite = curtain_sprites[typ];
         if(team == 0){
             var r = await RollD6(k, hdices);
             return r;
@@ -77,6 +82,8 @@ public class DiceManager : MonoBehaviour {
         List<Task> tsks = new List<Task>();
         Vector3 origin = -Vector3.right * spacing * (rs.Length - 1) / 2;
 
+        await AsyncTweener.Tween(.2f, t => curtain_cg.alpha = t);
+
         for(int i=0; i<rs.Length; i++){
             var d = dices[i];
             d.ResetPos();
@@ -94,6 +101,7 @@ public class DiceManager : MonoBehaviour {
         await AsyncTweener.Tween(.2f, t =>  result_cg.alpha = t);
         await AsyncTweener.Wait(.6f);
         await AsyncTweener.Tween(.2f, t =>  result_cg.alpha = 1-t);
+        await AsyncTweener.Tween(.1f, t => curtain_cg.alpha = 1-t);
         DisableDices();
         working = false;
         return r;

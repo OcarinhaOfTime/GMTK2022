@@ -386,7 +386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7856624ac77e46f46abcf2c36479aa5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  state: 5
   spriteSheet:
   - {fileID: 507352370, guid: 56e66ff2f0324564a99b65ae419733ce, type: 3}
   - {fileID: -855238302, guid: 56e66ff2f0324564a99b65ae419733ce, type: 3}
@@ -399,7 +399,25 @@ MonoBehaviour:
   - {fileID: -532320881, guid: 56e66ff2f0324564a99b65ae419733ce, type: 3}
   - {fileID: 1620645659, guid: 56e66ff2f0324564a99b65ae419733ce, type: 3}
   - {fileID: -1024382556, guid: 56e66ff2f0324564a99b65ae419733ce, type: 3}
+  - {fileID: -501765004, guid: 56e66ff2f0324564a99b65ae419733ce, type: 3}
+  - {fileID: -588480639, guid: 56e66ff2f0324564a99b65ae419733ce, type: 3}
+  - {fileID: -1281112959, guid: 56e66ff2f0324564a99b65ae419733ce, type: 3}
+  - {fileID: 277541268, guid: 56e66ff2f0324564a99b65ae419733ce, type: 3}
+  spriteSheetWalk:
+  - {fileID: 100289273, guid: 067be91e58b7d0c4a9535d7931f9d75a, type: 3}
+  - {fileID: -1395891129, guid: 067be91e58b7d0c4a9535d7931f9d75a, type: 3}
+  - {fileID: 2017975142, guid: 067be91e58b7d0c4a9535d7931f9d75a, type: 3}
+  - {fileID: 545277703, guid: 067be91e58b7d0c4a9535d7931f9d75a, type: 3}
+  - {fileID: -606692744, guid: 067be91e58b7d0c4a9535d7931f9d75a, type: 3}
+  - {fileID: -228474629, guid: 067be91e58b7d0c4a9535d7931f9d75a, type: 3}
+  - {fileID: 1198587447, guid: 067be91e58b7d0c4a9535d7931f9d75a, type: 3}
+  - {fileID: -787573705, guid: 067be91e58b7d0c4a9535d7931f9d75a, type: 3}
+  - {fileID: 881668808, guid: 067be91e58b7d0c4a9535d7931f9d75a, type: 3}
+  - {fileID: 1358404736, guid: 067be91e58b7d0c4a9535d7931f9d75a, type: 3}
+  - {fileID: -195531693, guid: 067be91e58b7d0c4a9535d7931f9d75a, type: 3}
+  - {fileID: 461588535, guid: 067be91e58b7d0c4a9535d7931f9d75a, type: 3}
   fps: 2
+  facing: 0
 --- !u!212 &2014317272
 SpriteRenderer:
   m_ObjectHideFlags: 0

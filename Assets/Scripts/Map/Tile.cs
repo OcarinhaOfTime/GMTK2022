@@ -13,9 +13,6 @@ public class Tile : MonoBehaviour {
     public int cost_value { set { costt.text = "" + value; cost = value; } }
     [SerializeField] TMP_Text costt;
     //private SpriteRenderer spriteRenderer;
-    public Color activeColor;
-    public Color hColor;
-    public Color deactiveColor;
     public Unit unit = null;
 
     //public bool active = false;
@@ -25,10 +22,16 @@ public class Tile : MonoBehaviour {
 
     [SerializeField]Sprite base_sprite;
     [SerializeField]Sprite detail_sprite;
+    MapController controller;
 
     void Awake() {
         //spriteRenderer = GetComponent<SpriteRenderer>();
     }
+
+    public void Setup(MapController controller){
+        this.controller = controller;
+    }
+
     [ContextMenu("Hide Sprites")]
     public void HideSprites(){
         base_rdr.gameObject.hideFlags = customHideFlags;
@@ -44,15 +47,15 @@ public class Tile : MonoBehaviour {
     }
 
     public void Active() {
-        overlay_rdr.color = activeColor;
+        overlay_rdr.color = controller.activeColor;
     }
 
     public void Highlight() {
-        overlay_rdr.color = hColor;
+        overlay_rdr.color = controller.hColor;
     }
 
     public void Deactive() {
-        overlay_rdr.color = deactiveColor;
+        overlay_rdr.color = controller.deactiveColor;
     }
 
     [ContextMenu("Apply Sprites")]

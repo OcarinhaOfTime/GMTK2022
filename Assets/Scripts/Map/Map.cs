@@ -188,6 +188,41 @@ public class Map<T> : IEnumerable<T> {
         throw new Exception("No path found");
     }
 
+    public HashSet<(int, int)> FloodFillAtk(int x0, int y0, int k,
+    Action<T, int, int> fn, Func<T, int> cost_fn, 
+    int range, Action<T, int, int> atk_fn){
+        HashSet<(int, int)> mem = new HashSet<(int, int)>();
+        Queue<(int, int, int)> q = new Queue<(int, int, int)>();
+        Queue<(int, int, int)> aq = new Queue<(int, int, int)>();
+        mem.Clear();
+        mem.Add((x0, y0));
+        fn(map[x0, y0], x0, y0);
+        IterQuad(x0, y0, (t, x, y) => q.Enqueue((x, y, k-cost_fn(t))));
+        while(q.Count > 0){
+            (var x, var y, var k0) = q.Dequeue();
+            if(mem.Contains((x, y))) continue;
+            if(k0 < 0) {
+                aq.Enqueue((x, y, range-1));
+                continue;
+            }
+            
+            mem.Add((x, y));
+            fn(map[x, y], x, y);
+            IterQuad(x, y, (t, x_, y_) => q.Enqueue((x_, y_, k0-cost_fn(t))));
+        }
+
+        var amem = new  HashSet<(int, int)>(mem);
+
+        while(aq.Count > 0){
+            (var x, var y, var k0) = aq.Dequeue();
+            if(amem.Contains((x, y)) || k0 < 0) continue;
+            amem.Add((x, y));
+            atk_fn(map[x, y], x, y);
+            IterQuad(x, y, (t, x_, y_) => aq.Enqueue((x_, y_, k0-1)));
+        }
+
+        return mem;
+    }
     
     public HashSet<(int, int)> FloodFill(int x0, int y0, int k, Action<T, int, int> fn, Func<T, int> cost_fn){
         HashSet<(int, int)> mem = new HashSet<(int, int)>();

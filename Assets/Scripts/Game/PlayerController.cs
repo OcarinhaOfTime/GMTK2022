@@ -74,6 +74,18 @@ public class PlayerController : TurnController {
         await ProcessMap();
     }
 
+    public HashSet<(int, int)> selectedTiles;
+
+    public void SelectUnitInMap(int x, int y, int k, Unit u){
+        print($"clicked {x}x{y}");
+        var map = mapController.map;
+        var tile = map[x, y];
+        mapController.ResetSelection();
+        selectedTiles = map.FloodFillAtk(
+            x, y, k, (t, x0, y0) => t.Active(), t => t.const_compound,
+            u.attributes.range, (t, x, y) => t.Highlight());
+    }
+
     async Task ProcessMap(){
         await WorldUI.instance.Close();
         (var x, var y, var b) = mapController.EvaluateMouse();
@@ -89,15 +101,15 @@ public class PlayerController : TurnController {
         if(option == 0){
             print("We moving " + u.attributes.className);
             state = ControlState.UnitMoving;
-            var m = await DiceManager.instance.RollD6(u.attributes.move, 0);
-            mapController.OnClickTile(u.coord.x, u.coord.y, m);
+            var m = await DiceManager.instance.RollD6(u.attributes.move, 0, 1);
+            SelectUnitInMap(u.coord.x, u.coord.y, m, u);
         } 
     }
 
     async Task UnitSelected() {
         (var x, var y, var b) = mapController.EvaluateMouse();
         if (!b) return;        
-        if (!mapController.selectedTiles.Contains((x, y))) return;
+        if (!selectedTiles.Contains((x, y))) return;
 
         mapController.ResetSelection();
         

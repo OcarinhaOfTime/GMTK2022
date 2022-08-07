@@ -15,8 +15,8 @@ Shader "Unlit/SpriteRepeat"
     SubShader
     {
         Tags{ "RenderType" = "Transparent" "Queue" = "Transparent" }
-		ZWrite Off
-		ZTest Always
+		
+		
 		Blend SrcAlpha OneMinusSrcAlpha
 		Cull Off
 		Lighting Off

@@ -6,6 +6,8 @@ using UnityEngine;
 public class MapTester : MonoBehaviour {
     [Range(1, 20)]
     public int k = 1;
+    [Range(1, 10)]
+    public int atk_range = 1;
     MapController mapController;
     void Start(){
         
@@ -23,9 +25,9 @@ public class MapTester : MonoBehaviour {
         if(!b) return;
         selected = (x, y);
         mapController.map[x, y].Active();
-        mapController.map.FloodFill(x, y, k, (t, x0, y0) => {
+        mapController.map.FloodFillAtk(x, y, k, (t, x0, y0) => {
             t.Active();
-        }, t=> t.const_compound);
+        }, t=> t.const_compound, atk_range, (t, x, y) => t.Highlight());
 
         // mapController.map.MapNeighborIter(new Coord(x, y), (t, x0, y0) => {
         //     t.Active();
