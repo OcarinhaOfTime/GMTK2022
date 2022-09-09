@@ -14,12 +14,12 @@ Shader "Unlit/SpriteRepeat"
     }
     SubShader
     {
-        Tags{ "RenderType" = "Transparent" "Queue" = "Transparent" }
-		
+        Tags{ "RenderType" = "Transparent" "Queue" = "Transparent" }		
 		
 		Blend SrcAlpha OneMinusSrcAlpha
 		Cull Off
 		Lighting Off
+        ZWrite On
 
 		Stencil
          {

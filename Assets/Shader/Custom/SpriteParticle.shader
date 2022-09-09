@@ -14,7 +14,6 @@ Shader "Unlit/SpriteParticle"
     {
         Tags{ "RenderType" = "Transparent" "Queue" = "Transparent" }
 		
-		
 		Blend SrcAlpha OneMinusSrcAlpha
 		Cull Off
 		Lighting Off
